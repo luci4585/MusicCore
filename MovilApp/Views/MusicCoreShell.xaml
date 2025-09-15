@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<Shell
+    x:Class="MovilApp.Views.MusicCoreShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:MovilApp"
+    xmlns:login="clr-namespace:MovilApp.Views.Login"
+    xmlns:contentviews="clr-namespace:MovilApp.ContentViews"
+    xmlns:viewmodels="clr-namespace:MovilApp.ViewModels"
+    FlyoutBehavior="Disabled"
+    Title="MusicCoreApp">
+
+    <Shell.BindingContext>
+        <viewmodels:MusicCoreShellViewModel />
+    </Shell.BindingContext>
+
+    <Shell.FlyoutHeader>
+        <contentviews:FlyoutHeader />
+    </Shell.FlyoutHeader>
+
+    <Shell.FlyoutFooter>
+        <contentviews:FlyoutFooter />
+    </Shell.FlyoutFooter>
+
+    <FlyoutItem Route="mi_app" 
+        FlyoutDisplayOptions="AsMultipleItems" x:Name="FlyoutItemsPrincipal" >
+        <ShellContent
+            Title="Home"
+            ContentTemplate="{DataTemplate local:MainPage}"
+            Route="MainPage" />
+
+    </FlyoutItem>
+    <MenuItem Text="Cerrar sesión"
+      Command="{Binding LogoutCommand}"
+      IconImageSource="random.png"/>
+
+    <ShellContent
+        Title="Iniciar sesión"
+        ContentTemplate="{DataTemplate login:LoginView}"
+        Route="Login" 
+        IsVisible="{Binding UserIsLogout}"/>
+
+</Shell>
