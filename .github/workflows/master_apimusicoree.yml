@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - apimusiccore
+name: Build and deploy ASP.Net Core app to Azure Web App - apimusicoree
 
 on:
   push:
@@ -51,15 +51,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_1D64E69529D342EEB20CBBC7A63F1FB6 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_D2D0330F3949473688869662FD6F3F34 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_76C72F768DBE477B85754D1CC52C5E34 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_F8842C4A2B514BB99632D5D88FEC5262 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FC54C33A294A4345803E7C2EC7D11E0A }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_58FE8E4F03224795A5B42D2703A9B851 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'apimusiccore'
+          app-name: 'apimusicoree'
           slot-name: 'Production'
           package: .
 
