@@ -121,7 +121,7 @@
     <value>AIzaSyDb3yHZE19C3Vhqgn68ofpTm3BOzMRYxDw</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>https://musicore.azurewebsites.net/api/</value>
+    <value>https://apimusicoree.azurewebsites.net/api/</value>
   </data>
   <data name="ApiUrlLocal" xml:space="preserve">
     <value>https://localhost:7000/swagger/index.html</value>

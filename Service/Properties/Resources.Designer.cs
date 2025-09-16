@@ -70,7 +70,7 @@ namespace Service.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a https://musicore.azurewebsites.net/api/.
+        ///   Busca una cadena traducida similar a https://apimusicoree.azurewebsites.net/api/.
         /// </summary>
         public static string ApiUrl {
             get {
