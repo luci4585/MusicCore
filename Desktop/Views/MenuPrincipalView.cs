@@ -20,5 +20,12 @@ namespace Desktop
             usuariosView.MdiParent = this;
             usuariosView.Show();
         }
+
+        private void SubMenuDisco_Click(object sender, EventArgs e)
+        {
+            var discosView = new DiscosView();
+            discosView.MdiParent = this;
+            discosView.Show();
+        }
     }
 }

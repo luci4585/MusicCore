@@ -35,7 +35,7 @@ namespace Desktop.Views
                 var respuesta = MessageBox.Show($"¿Está seguro de eliminar el disco {entitySelected.Titulo} seleccionado?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (respuesta == DialogResult.Yes)
                 {
-                    if (await _discoService.DeleteAsync(entitySelected.DiscoId))
+                    if (await _discoService.DeleteAsync(entitySelected.Id))
                     {
                         LabelStatusMessage.Text = $"Disco {entitySelected.Titulo} eliminado correctamente";
                         TimerStatusBar.Start();
