@@ -70,6 +70,15 @@ namespace Service.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a https://musicore.azurewebsites.net/api/.
+        /// </summary>
+        public static string ApiUrl {
+            get {
+                return ResourceManager.GetString("ApiUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a https://localhost:7000/swagger/index.html.
         /// </summary>
         public static string ApiUrlLocal {

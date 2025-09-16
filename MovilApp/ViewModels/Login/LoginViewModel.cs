@@ -91,8 +91,8 @@ namespace MovilApp.ViewModels.Login
                     _userRepository.DeleteUser();
                 }
 
-                var institutoShell = (MusicCoreShell)App.Current.MainPage;
-                //institutoShell.EnableAppAfterLogin();
+                var musicCoreShell = (MusicCoreShell)App.Current.MainPage;
+                //musicCoreShell.EnableAppAfterLogin();
 
             }
             catch (FirebaseAuthException error)
