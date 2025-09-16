@@ -54,7 +54,7 @@ namespace Backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
         {
-            if (id != usuario.UsuarioId)
+            if (id != usuario.Id)
             {
                 return BadRequest();
             }
@@ -88,7 +88,7 @@ namespace Backend.Controllers
             _context.Usuario.Add(usuario);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUsuario", new { id = usuario.UsuarioId }, usuario);
+            return CreatedAtAction("GetUsuario", new { id = usuario.Id }, usuario);
         }
 
         // DELETE: api/Usuarios/5
@@ -111,7 +111,7 @@ namespace Backend.Controllers
         [HttpPut("restore/{id}")]
         public async Task<IActionResult> RestoreUsuario(int id)
         {
-            var usuario = await _context.Usuarios.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.UsuarioId.Equals(id));
+            var usuario = await _context.Usuarios.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.Id.Equals(id));
             if (usuario == null)
             {
                 return NotFound();
@@ -126,7 +126,7 @@ namespace Backend.Controllers
 
         private bool UsuarioExists(int id)
         {
-            return _context.Usuario.Any(e => e.UsuarioId == id);
+            return _context.Usuario.Any(e => e.Id == id);
         }
     }
 }

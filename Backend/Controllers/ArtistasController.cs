@@ -54,7 +54,7 @@ namespace Backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutArtista(int id, Artista artista)
         {
-            if (id != artista.ArtistaId)
+            if (id != artista.Id)
             {
                 return BadRequest();
             }
@@ -88,7 +88,7 @@ namespace Backend.Controllers
             _context.Artistas.Add(artista);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetArtista", new { id = artista.ArtistaId }, artista);
+            return CreatedAtAction("GetArtista", new { id = artista.Id }, artista);
         }
 
         // DELETE: api/Artistas/5
@@ -114,7 +114,7 @@ namespace Backend.Controllers
         [HttpPut("restore/{id}")]
         public async Task<IActionResult> RestoreArtista(int id)
         {
-            var artista = await _context.Artistas.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.ArtistaId.Equals(id));
+            var artista = await _context.Artistas.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.Id.Equals(id));
             if (artista == null)
             {
                 return NotFound();
@@ -129,7 +129,7 @@ namespace Backend.Controllers
 
         private bool ArtistaExists(int id)
         {
-            return _context.Artistas.Any(e => e.ArtistaId == id);
+            return _context.Artistas.Any(e => e.Id == id);
         }
     }
 }

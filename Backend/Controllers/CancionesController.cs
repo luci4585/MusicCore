@@ -54,7 +54,7 @@ namespace Backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCancion(int id, Cancion cancion)
         {
-            if (id != cancion.CancionId)
+            if (id != cancion.Id)
             {
                 return BadRequest();
             }
@@ -88,7 +88,7 @@ namespace Backend.Controllers
             _context.Canciones.Add(cancion);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCancion", new { id = cancion.CancionId }, cancion);
+            return CreatedAtAction("GetCancion", new { id = cancion.Id }, cancion);
         }
 
         // DELETE: api/Canciones/5
@@ -113,7 +113,7 @@ namespace Backend.Controllers
         [HttpPut("restore/{id}")]
         public async Task<IActionResult> RestoreCancion(int id)
         {
-            var cancion = await _context.Canciones.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.CancionId.Equals(id));
+            var cancion = await _context.Canciones.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.Id.Equals(id));
             if (cancion == null)
             {
                 return NotFound();
@@ -128,7 +128,7 @@ namespace Backend.Controllers
 
         private bool CancionExists(int id)
         {
-            return _context.Canciones.Any(e => e.CancionId == id);
+            return _context.Canciones.Any(e => e.Id == id);
         }
     }
 }

@@ -54,7 +54,7 @@ namespace Backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCliente(int id, Cliente cliente)
         {
-            if (id != cliente.ClienteId)
+            if (id != cliente.Id)
             {
                 return BadRequest();
             }
@@ -81,14 +81,13 @@ namespace Backend.Controllers
         }
 
         // POST: api/Clientes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
         {
             _context.Clientes.Add(cliente);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCliente", new { id = cliente.ClienteId }, cliente);
+            return CreatedAtAction("GetCliente", new { id = cliente.Id }, cliente);
         }
 
         // DELETE: api/Clientes/5
@@ -113,7 +112,7 @@ namespace Backend.Controllers
         [HttpPut("restore/{id}")]
         public async Task<IActionResult> RestoreCliente(int id)
         {
-            var cliente = await _context.Clientes.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.ClienteId.Equals(id));
+            var cliente = await _context.Clientes.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.Id.Equals(id));
             if (cliente == null)
             {
                 return NotFound();
@@ -128,7 +127,7 @@ namespace Backend.Controllers
 
         private bool ClienteExists(int id)
         {
-            return _context.Clientes.Any(e => e.ClienteId == id);
+            return _context.Clientes.Any(e => e.Id == id);
         }
     }
 }

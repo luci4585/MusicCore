@@ -54,7 +54,7 @@ namespace Backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutGenero(int id, Genero genero)
         {
-            if (id != genero.GeneroId)
+            if (id != genero.Id)
             {
                 return BadRequest();
             }
@@ -88,7 +88,7 @@ namespace Backend.Controllers
             _context.Generos.Add(genero);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetGenero", new { id = genero.GeneroId }, genero);
+            return CreatedAtAction("GetGenero", new { id = genero.Id }, genero);
         }
 
         // DELETE: api/Generos/5
@@ -113,7 +113,7 @@ namespace Backend.Controllers
         [HttpPut("restore/{id}")]
         public async Task<IActionResult> RestoreGenero(int id)
         {
-            var genero = await _context.Generos.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.GeneroId.Equals(id));
+            var genero = await _context.Generos.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.Id.Equals(id));
             if (genero == null)
             {
                 return NotFound();
@@ -128,7 +128,7 @@ namespace Backend.Controllers
 
         private bool GeneroExists(int id)
         {
-            return _context.Generos.Any(e => e.GeneroId == id);
+            return _context.Generos.Any(e => e.Id == id);
         }
     }
 }

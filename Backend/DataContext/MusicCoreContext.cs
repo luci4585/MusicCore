@@ -39,44 +39,44 @@ namespace Backend.DataContext
 
             //Cargamos datos iniciales de artistas de musica
             modelBuilder.Entity<Artista>().HasData(
-                new Artista { ArtistaId = 1, Nombre = "The Beatles" },
-                new Artista { ArtistaId = 2, Nombre = "Michael Jackson" },
-                new Artista { ArtistaId = 3, Nombre = "Madonna" }
+                new Artista { Id = 1, Nombre = "The Beatles" },
+                new Artista { Id = 2, Nombre = "Michael Jackson" },
+                new Artista { Id = 3, Nombre = "Madonna" }
             );
 
             //Cargamos datos iniciales de generos musicales
             modelBuilder.Entity<Genero>().HasData(
-                new Genero { GeneroId = 1, Nombre = "Rock" },
-                new Genero { GeneroId = 2, Nombre = "Pop" },
-                new Genero { GeneroId = 3, Nombre = "Jazz" }
+                new Genero { Id = 1, Nombre = "Rock" },
+                new Genero { Id = 2, Nombre = "Pop" },
+                new Genero { Id = 3, Nombre = "Jazz" }
             );
 
             //Cargamos datos iniciales de discos
             modelBuilder.Entity<Disco>().HasData(
-                new Disco { DiscoId = 1, Titulo = "Abbey Road", ArtistaId = 1, GeneroId = 1 },
-                new Disco { DiscoId = 2, Titulo = "Thriller", ArtistaId = 2, GeneroId = 2 },
-                new Disco { DiscoId = 3, Titulo = "Like a Virgin", ArtistaId = 3, GeneroId = 2 }
+                new Disco { Id = 1, Titulo = "Abbey Road", ArtistaId = 1, GeneroId = 1 },
+                new Disco { Id = 2, Titulo = "Thriller", ArtistaId = 2, GeneroId = 2 },
+                new Disco { Id = 3, Titulo = "Like a Virgin", ArtistaId = 3, GeneroId = 2 }
             );
 
             //Cargamos datos iniciales de canciones
             modelBuilder.Entity<Cancion>().HasData(
-                new Cancion { CancionId = 1, Titulo = "Come Together", Duracion = 4.20M, DiscoId = 1 },
-                new Cancion { CancionId = 2, Titulo = "Billie Jean", Duracion = 4.54M, DiscoId = 2 },
-                new Cancion { CancionId = 3, Titulo = "Material Girl", Duracion = 4.00M, DiscoId = 3 }
+                new Cancion { Id = 1, Titulo = "Come Together", Duracion = 4.20M, DiscoId = 1 },
+                new Cancion { Id = 2, Titulo = "Billie Jean", Duracion = 4.54M, DiscoId = 2 },
+                new Cancion { Id = 3, Titulo = "Material Girl", Duracion = 4.00M, DiscoId = 3 }
             );
 
             //Cargamos datos iniciales de clientes
             modelBuilder.Entity<Cliente>().HasData(
-                new Cliente { ClienteId = 1, Nombre = "Juan Perez", Email = "perezJuan@gmail.com" },
-                new Cliente { ClienteId = 2, Nombre = "Maria Gomez", Email = "gomezMaria@gmail.com" },
-                new Cliente { ClienteId = 3, Nombre = "Carlos Sanchez", Email = "sanchezCarlos@gmail.com" }
+                new Cliente { Id = 1, Nombre = "Juan Perez", Email = "perezJuan@gmail.com" },
+                new Cliente { Id = 2, Nombre = "Maria Gomez", Email = "gomezMaria@gmail.com" },
+                new Cliente { Id = 3, Nombre = "Carlos Sanchez", Email = "sanchezCarlos@gmail.com" }
             );
 
             //Cargamos datos iniciales de ventas
             modelBuilder.Entity<Venta>().HasData(
-                new Venta { VentaId = 1, Fecha = DateTime.Now, Precio = 95000, Cantidad = 1, ClienteId = 1, DiscoId = 1 },
-                new Venta { VentaId = 2, Fecha = DateTime.Now, Precio = 70000, Cantidad = 2, ClienteId = 2, DiscoId = 2 },
-                new Venta { VentaId = 3, Fecha = DateTime.Now, Precio = 80000, Cantidad = 1, ClienteId = 3, DiscoId = 3 }
+                new Venta { Id = 1, Fecha = DateTime.Now, Precio = 95000, Cantidad = 1, ClienteId = 1 },
+                new Venta { Id = 2, Fecha = DateTime.Now, Precio = 70000, Cantidad = 2, ClienteId = 2, },
+                new Venta { Id = 3, Fecha = DateTime.Now, Precio = 80000, Cantidad = 1, ClienteId = 3, }
             );
 
 

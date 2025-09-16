@@ -125,7 +125,7 @@ namespace Backend.Controllers
         [HttpPut("restore/{id}")]
         public async Task<IActionResult> RestoreDiscoVenta(int id)
         {
-            var discoventa = await _context.DiscosVentas.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.DiscoVentaId.Equals(id));
+            var discoventa = await _context.DiscosVentas.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.Id.Equals(id));
             if (discoventa == null)
             {
                 return NotFound();

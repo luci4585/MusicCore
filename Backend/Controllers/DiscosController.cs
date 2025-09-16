@@ -50,11 +50,10 @@ namespace Backend.Controllers
         }
 
         // PUT: api/Discos/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDisco(int id, Disco disco)
         {
-            if (id != disco.DiscoId)
+            if (id != disco.Id)
             {
                 return BadRequest();
             }
@@ -88,7 +87,7 @@ namespace Backend.Controllers
             _context.Discos.Add(disco);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDisco", new { id = disco.DiscoId }, disco);
+            return CreatedAtAction("GetDisco", new { id = disco.Id }, disco);
         }
 
         // DELETE: api/Discos/5
@@ -113,7 +112,7 @@ namespace Backend.Controllers
         [HttpPut("restore/{id}")]
         public async Task<IActionResult> RestoreDisco(int id)
         {
-            var disco = await _context.Discos.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.DiscoId.Equals(id));
+            var disco = await _context.Discos.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.Id.Equals(id));
             if (disco == null)
             {
                 return NotFound();
@@ -128,7 +127,7 @@ namespace Backend.Controllers
 
         private bool DiscoExists(int id)
         {
-            return _context.Discos.Any(e => e.DiscoId == id);
+            return _context.Discos.Any(e => e.Id == id);
         }
     }
 }
