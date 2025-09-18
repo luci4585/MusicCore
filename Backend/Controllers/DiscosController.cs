@@ -50,6 +50,7 @@ namespace Backend.Controllers
         }
 
         // PUT: api/Discos/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDisco(int id, Disco disco)
         {
@@ -100,9 +101,7 @@ namespace Backend.Controllers
                 return NotFound();
             }
 
-            //borrado lógico
-            disco.IsDeleted = true;
-            _context.Discos.Update(disco);
+            _context.Discos.Remove(disco);
             await _context.SaveChangesAsync();
 
             return NoContent();
