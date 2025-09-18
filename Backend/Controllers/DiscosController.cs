@@ -25,7 +25,12 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Disco>>> GetDiscos()
         {
-            return await _context.Discos.ToListAsync();
+            return await _context.Discos
+                .Include(d => d.Artista)
+                .Include(d => d.Genero)
+                .Include(d => d.Canciones)
+                .Include(d => d.DiscoVentas)
+                .ToListAsync();
         }
 
         // GET: api/Discos/deleteds
