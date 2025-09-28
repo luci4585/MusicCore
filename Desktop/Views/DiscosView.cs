@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Service.Models;
+using Service.Services;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using Service.Models;
-using Service.Services;
+using System.Windows.Controls;
 
 namespace Desktop.Views
 {
@@ -16,11 +17,30 @@ namespace Desktop.Views
         {
             InitializeComponent();
             _=GetAllData();
+            CheckVerEliminados.CheckedChanged += DisplayHideControlsRestoreButton;
+        }
+
+        private void DisplayHideControlsRestoreButton(object sender, EventArgs e)
+        {
+            BtnRestaurar.Visible = CheckVerEliminados.Checked;
+            BtnEliminar.Enabled = !CheckVerEliminados.Checked;
+            BtnModificar.Enabled = !CheckVerEliminados.Checked;
+            BtnAgregar.Enabled = !CheckVerEliminados.Checked;
+            BtnModificar.Enabled = !CheckVerEliminados.Checked;
+            BtnBuscar.Enabled = !CheckVerEliminados.Checked;
+
         }
 
         private async Task GetAllData()
         {
-            _discos = await _discoService.GetAllAsync();
+            if (CheckVerEliminados.Checked)
+            { 
+                _discos = await _discoService.GetAllDeletedsAsync();
+            }
+            else
+            { 
+                _discos = await _discoService.GetAllAsync();
+            }
             GridDiscos.DataSource = _discos;
             GridDiscos.Columns["Id"].Visible = false;
             GridDiscos.Columns["IsDeleted"].Visible = false;
@@ -61,8 +81,8 @@ namespace Desktop.Views
         private void LimpiarControlesAgregarEditar()
         {
             TxtTitulo.Clear();
-            NumericDuracion.Value = 0;
-            NumericCalificacion.Value = 0;
+            TxtArtista.Clear();
+            TxtGenero.Clear();
         }
 
         private void BtnCancelar_Click(object sender, EventArgs e)
@@ -72,66 +92,59 @@ namespace Desktop.Views
 
         private async void BtnGuardar_Click(object sender, EventArgs e)
         {
-            //Pelicula peliculaAGuardar = new Pelicula
-            //{
-            //    id = peliculaModificada?.id ?? null,
-            //    titulo = TxtTitulo.Text,
-            //    duracion = (int)NumericDuracion.Value,
-            //    portada = TxtPortada.Text,
-            //    calificacion = (double)NumericCalificacion.Value,
-            //    PaisId = (int?)ComboPaises.SelectedValue
-            //};
+            Disco discoAGuardar = new Disco
+            {
+                Id = _currentDisco?.Id ?? 0,
+                Titulo = TxtTitulo.Text,
+                Artista = new Artista { Nombre = TxtArtista.Text },
+                Genero = new Genero { Nombre = TxtGenero.Text }
 
-            //bool response;
-            //if (peliculaModificada != null)
-            //{
-            //    response = await peliculaService.UpdateAsync(peliculaAGuardar);
-            //}
-            //else
-            //{
-            //    response = await peliculaService.AddAsync(peliculaAGuardar);
-            //}
-            //if (response)
-            //{
-            //    peliculaModificada = null; // Reiniciamos la variable para futuras inserciones
-            //    LabelStatusMessage.Text = "Película modificada correctamente";
-            //    TimerStatusBar.Start();
-            //    ObtenemosPeliculas();
-            //    LimpiarControlesAgregarEditar();
-            //    TabControl.SelectTab("TabPageLista");
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Error al agregar la pelicula", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
+            };
+            bool response = false;
+            if (_currentDisco != null)
+            {
+                response = await _discoService.UpdateAsync(discoAGuardar);
+            }
+            else
+            {
+                var nuevacapacitacion = await _discoService.AddAsync(discoAGuardar);
+                response = nuevacapacitacion != null;
+            }
+            if (response)
+            {
+                _currentDisco = null; // Reset the modified movie after saving
+                LabelStatusMessage.Text = $"Disco {discoAGuardar.Titulo} guardado correctamente";
+                TimerStatusBar.Start(); // Iniciar el temporizador para mostrar el mensaje en la barra de estado
+                await GetAllData();
+                LimpiarControlesAgregarEditar();
+                TabControl.SelectedTab = TabPageLista;
+            }
+            else
+            {
+                MessageBox.Show("Error al agregar la capacitacion", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void BtnModificar_Click(object sender, EventArgs e)
         {
-            //chequeamos que haya películas seleccionadas
-            //if (GridPeliculas.RowCount > 0 && GridPeliculas.SelectedRows.Count > 0)
-            //{
-            //    peliculaModificada = (Pelicula)GridPeliculas.SelectedRows[0].DataBoundItem;
-            //    TxtTitulo.Text = peliculaModificada.titulo;
-            //    NumericDuracion.Value = peliculaModificada.duracion;
-            //    TxtPortada.Text = peliculaModificada.portada;
-            //    NumericCalificacion.Value = (decimal)peliculaModificada.calificacion;
-            //    //asignar el país seleccionado en el combo
-            //    if (peliculaModificada.PaisId != null)
-            //    {
-            //        ComboPaises.SelectedValue = peliculaModificada.PaisId;
-            //    }
-            //    else
-            //    {
-            //        ComboPaises.SelectedIndex = -1;
-            //    }
-            //    TabControl.SelectTab("TabpageAgregarEditar");
-            //}
+            if (GridDiscos.RowCount > 0 && GridDiscos.SelectedRows.Count > 0)
+            {
+                _currentDisco = (Disco)GridDiscos.SelectedRows[0].DataBoundItem;
+                TxtTitulo.Text = _currentDisco.Titulo;
+                TxtArtista.Text = _currentDisco.Artista?.Nombre ?? string.Empty;
+                TxtGenero.Text = _currentDisco.Genero?.Nombre ?? string.Empty;
+                TabControl.SelectedTab = TabPageAgregarEditar;
+
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar una Capacitacion para modificarla", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
-            // GridPeliculas.DataSource = peliculas.Where(p => p.titulo.ToUpper().Contains(TxtBuscar.Text.ToUpper())).ToList();
+            //GridDiscos.DataSource = discos.Where(p => p.Titulo.ToUpper().Contains(TxtBuscar.Text.ToUpper())).ToList();
         }
 
         private void TxtBuscar_TextChanged(object sender, EventArgs e)
@@ -154,9 +167,41 @@ namespace Desktop.Views
         {
             if (GridDiscos.RowCount > 0 && GridDiscos.SelectedRows.Count > 0)
             {
-                //Capacitacion _curr = (Pelicula)GridPeliculas.SelectedRows[0].DataBoundItem;
-                //FilmPicture.ImageLocation = peliculaSeleccionada.portada;
+                //Disco _curr = (Disco)GridDiscos.SelectedRows[0].DataBoundItem;
             }
+        }
+
+        private async void BtnRestaurar_Click(object sender, EventArgs e)
+        {
+            if (!CheckVerEliminados.Checked) return;
+
+            if (GridDiscos.Rows.Count > 0 && GridDiscos.SelectedRows.Count > 0)
+            {
+                Disco entitySelected = (Disco)GridDiscos.SelectedRows[0].DataBoundItem;
+                var respuesta = MessageBox.Show($"¿Está seguro de recuperar el disco {entitySelected.Titulo} seleccionado?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (respuesta == DialogResult.Yes)
+                {
+                    if (await _discoService.RestoreAsync(entitySelected.Id))
+                    {
+                        LabelStatusMessage.Text = $"Capacitación {entitySelected.Titulo} restaurada correctamente";
+                        TimerStatusBar.Start();
+                        await GetAllData();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al restaurar la capacitacion", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Debe seleccionar una capacitación para restaurar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async void CheckVerEliminados_CheckedChanged(object sender, EventArgs e)
+        {
+            await GetAllData();
         }
     }
 } 

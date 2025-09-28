@@ -48,7 +48,7 @@
                 try {
                     const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
                     console.log(userCredential);
-                    return userCredential.user.uid;
+                    return userCredential.user;
                 } catch (error) {
                     console.error("Error en autenticación:", error.message);
                     return null;
@@ -57,7 +57,6 @@
             createUserWithEmailAndPassword: async function (email, password, displayName) {
                 try {
                     //imprimo por consola los parametros recibidos
-                    console.log(`email${email}") password: ${password} displayName: ${displayName}`);
                     const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
                     // El usuario se ha creado correctamente
                     const user = userCredential.user;
@@ -66,19 +65,15 @@
                     user.updateProfile({
                         displayName: displayName
                     });
-                    return userCredential.user.uid;
+
                     //Enviar correo de verificación
-                    //user.sendEmailVerification()
-                    //    .then(() => {
-                    //        console.log('Correo de verificación enviado.');
-                    //    })
-                    //    .catch((error) => {
-                    //        console.error('Error al enviar el correo de verificación:', error);
-                    //    });
+                    user.sendEmailVerification();
+
+                    return userCredential.user.uid;
 
 
-
-                } catch (error) {
+                }
+                catch (error) {
                     console.error("Error en autenticación:", error.message);
                     return null;
                 }

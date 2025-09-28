@@ -64,11 +64,21 @@ else
     string email = string.Empty;
     string password = string.Empty;
 
+    protected override async Task OnInitializedAsync()
+    {
+        isAuthenticated = await firebaseAuthService.IsUserAuthenticated();
+    }
+
     private async Task Loguear()
     {
         var user = await firebaseAuthService.SignInWithEmailPassword(email, password);
         if (user != null)
         {
+            if (user.EmailVerified == false)
+            {
+                await sweetAlert.FireAsync("ATENCIÓN", "Por favor, verifique su correo electrónico antes de iniciar sesión.", SweetAlertIcon.Warning);
+                return;
+            }
             isAuthenticated = true;
             StateHasChanged();
         }

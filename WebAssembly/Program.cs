@@ -5,17 +5,17 @@ using Service.Interfaces;
 using Service.Services;
 using System.Net.Http;
 using WebBlazor;
+using WebBlazor.Pages.Login.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-// Aquí va tu componente principal (App.razor), no Disco
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-// Registrar HttpClient para llamadas a API
-builder.Services.AddScoped(sp =>
-    new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-builder.Services.AddSweetAlert2();
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
-builder.Services.AddScoped<WebBlazor.Pages.Services.FirebaseAuthService>();
+builder.Services.AddScoped<FirebaseAuthService>();
+builder.Services.AddSweetAlert2();
+
 await builder.Build().RunAsync();
+
