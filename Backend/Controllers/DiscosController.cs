@@ -105,8 +105,8 @@ namespace Backend.Controllers
             {
                 return NotFound();
             }
-
-            _context.Discos.Remove(disco);
+            disco.IsDeleted = true;
+            _context.Discos.Update(disco);
             await _context.SaveChangesAsync();
 
             return NoContent();
