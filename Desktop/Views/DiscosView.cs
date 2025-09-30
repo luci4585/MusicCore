@@ -10,13 +10,18 @@ namespace Desktop.Views
     public partial class DiscosView : Form
     {
         GenericService<Disco> _discoService = new GenericService<Disco>();
+        GenericService<Artista> _artistaService = new GenericService<Artista>();
+        GenericService<Genero> _generoService = new GenericService<Genero>();
+
         Disco _currentDisco;
         List<Disco>? _discos;
+        List<Artista>? _artistas;
+        List<Genero>? _generos;
 
         public DiscosView()
         {
             InitializeComponent();
-            _=GetAllData();
+            _ = GetAllData();
             CheckVerEliminados.CheckedChanged += DisplayHideControlsRestoreButton;
         }
 
@@ -33,17 +38,38 @@ namespace Desktop.Views
 
         private async Task GetAllData()
         {
+            GetComboArtistas();
+            GetComboGeneros();
+            _generos = await _generoService.GetAllAsync();
             if (CheckVerEliminados.Checked)
-            { 
+            {
                 _discos = await _discoService.GetAllDeletedsAsync();
             }
             else
-            { 
+            {
                 _discos = await _discoService.GetAllAsync();
             }
             GridDiscos.DataSource = _discos;
             GridDiscos.Columns["Id"].Visible = false;
             GridDiscos.Columns["IsDeleted"].Visible = false;
+        }
+
+        private async Task GetComboGeneros()
+        {
+            _generos= await _generoService.GetAllAsync();
+            ComboBoxGenero.DataSource = _generos;
+            ComboBoxGenero.DisplayMember = "Nombre";
+            ComboBoxGenero.ValueMember = "Id";
+            ComboBoxGenero.SelectedIndex = -1;
+        }
+
+        private async Task GetComboArtistas()
+        {
+            _artistas = await _artistaService.GetAllAsync();
+            ComboBoxArtista.DataSource = _artistas;
+            ComboBoxArtista.DisplayMember = "Nombre";
+            ComboBoxArtista.ValueMember = "Id";
+            ComboBoxArtista.SelectedIndex = -1;
         }
 
         private async void BtnEliminar_Click_1(object sender, EventArgs e)
@@ -81,8 +107,8 @@ namespace Desktop.Views
         private void LimpiarControlesAgregarEditar()
         {
             TxtTitulo.Clear();
-            TxtArtista.Clear();
-            TxtGenero.Clear();
+            ComboBoxGenero.SelectedIndex = -1;
+            ComboBoxArtista.SelectedIndex = -1;
         }
 
         private void BtnCancelar_Click(object sender, EventArgs e)
@@ -96,8 +122,8 @@ namespace Desktop.Views
             {
                 Id = _currentDisco?.Id ?? 0,
                 Titulo = TxtTitulo.Text,
-                Artista = new Artista { Nombre = TxtArtista.Text },
-                Genero = new Genero { Nombre = TxtGenero.Text }
+                ArtistaId= (int)(ComboBoxArtista.SelectedValue ?? 0),
+                GeneroId= (int)(ComboBoxGenero.SelectedValue ?? 0)
 
             };
             bool response = false;
@@ -131,8 +157,8 @@ namespace Desktop.Views
             {
                 _currentDisco = (Disco)GridDiscos.SelectedRows[0].DataBoundItem;
                 TxtTitulo.Text = _currentDisco.Titulo;
-                TxtArtista.Text = _currentDisco.Artista?.Nombre ?? string.Empty;
-                TxtGenero.Text = _currentDisco.Genero?.Nombre ?? string.Empty;
+                ComboBoxArtista.SelectedValue = _currentDisco.ArtistaId;
+                ComboBoxGenero.SelectedValue = _currentDisco.GeneroId;
                 TabControl.SelectedTab = TabPageAgregarEditar;
 
             }
@@ -203,5 +229,7 @@ namespace Desktop.Views
         {
             await GetAllData();
         }
+
+
     }
 } 

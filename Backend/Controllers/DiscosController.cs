@@ -28,8 +28,6 @@ namespace Backend.Controllers
             return await _context.Discos
                 .Include(d => d.Artista)
                 .Include(d => d.Genero)
-                .Include(d => d.Canciones)
-                .Include(d => d.DiscoVentas)
                 .ToListAsync();
         }
 

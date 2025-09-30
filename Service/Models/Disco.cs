@@ -21,8 +21,8 @@ namespace Service.Models
 
         public bool IsDeleted { get; set; } = false;
 
-        public ICollection<Cancion> Canciones { get; set; } = new List<Cancion>();
-        public ICollection<DiscoVenta> DiscoVentas { get; set; } = new List<DiscoVenta>();
+        //public ICollection<Cancion> Canciones { get; set; } = new List<Cancion>();
+        //public ICollection<DiscoVenta> DiscoVentas { get; set; } = new List<DiscoVenta>();
 
         public override string ToString()
         {
