@@ -16,6 +16,9 @@ else if (!discos.Any())
 }
 else
 {
+    <NavLink class="btn btn-info" href=@($"NuevoEditarDisco?IdDisco")>
+       Editar
+    </NavLink>
     <table class="table">
         <thead>
             <tr>
@@ -35,7 +38,7 @@ else
                     <td>
                         <button class="btn btn-danger" @onclick="() => DeleteDisco(disco)">Eliminar</button>
                     </td>
-                    <NavLink class="btn btn-info" href=@($"NuevoEditarDisco?idDisco={disco.Id}")>
+                    <NavLink class="btn btn-info" href=@($"NuevoEditarDisco?IdDisco={disco.Id}")>
                         Editar
                     </NavLink>
                 </tr>
