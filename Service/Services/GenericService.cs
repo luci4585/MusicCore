@@ -62,10 +62,10 @@ namespace Service.Services
         public async Task<bool> UpdateAsync(T? entity)
         {
             var idValue = entity.GetType().GetProperty("Id").GetValue(entity);
-            var response = await _httpClient.PutAsJsonAsync($"{_endpoint}/{idValue}", entity);
+            var response = await _httpClient.PutAsJsonAsync($"{ _endpoint}/{idValue}", entity);
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("Hubo un problema al actualizar");
+                throw new Exception("Hubo un problema al actualizar"); 
             }
             else
             {

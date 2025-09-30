@@ -142,9 +142,9 @@ namespace Desktop.Views
             }
         }
 
-        private void BtnBuscar_Click(object sender, EventArgs e)
+        private async void BtnBuscar_Click(object sender, EventArgs e)
         {
-            //GridDiscos.DataSource = discos.Where(p => p.Titulo.ToUpper().Contains(TxtBuscar.Text.ToUpper())).ToList();
+            GridDiscos.DataSource = await _discoService.GetAllAsync(TxtBuscar.Text);
         }
 
         private void TxtBuscar_TextChanged(object sender, EventArgs e)
