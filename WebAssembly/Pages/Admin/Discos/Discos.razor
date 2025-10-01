@@ -1,6 +1,9 @@
 ﻿@page "/discos"
+@using System.Diagnostics
 @inject SweetAlertService _sweetAlertService
 @inject IGenericService<Disco> _discoService
+@inject ILogger<Discos> _logger
+
 
 <PageTitle>Discos</PageTitle>
 
@@ -50,10 +53,19 @@ else
 
 @code {
     private List<Disco>? discos;
+    private List<Artista>? artistas;
+    private List<Genero>? generos;
 
     protected override async Task OnInitializedAsync()
     {
-        discos = (await _discoService.GetAllAsync(null))?.ToList();
+        //cronometramos el tiempo de carga
+        var stopwatch = Stopwatch.StartNew();
+        //ejecutamos las tareas de manera concurrente asignando a las listas los datos obtenidos
+        discos = await _discoService.GetAllAsync();
+
+        stopwatch.Stop();
+        _logger.LogInformation($"Tiempo de carga: {stopwatch.ElapsedMilliseconds} ms");
+        
     }
     private async Task DeleteDisco(Disco disco)
     {

@@ -17,7 +17,7 @@ namespace WebBlazor.Pages.Login.Services
         public async Task<FirebaseUser?> SignInWithEmailPassword(string email, string password)
         {
             var user = await _jsRuntime.InvokeAsync<FirebaseUser?>("firebaseAuth.signInWithEmailPassword", email, password);
-            if (user != null)
+            if (user != null && user.EmailVerified)
             {
                 await _jsRuntime.InvokeVoidAsync("localStorageHelper.setItem", UserIdKey, user.Uid);
                 OnChangeLogin?.Invoke();
@@ -28,11 +28,11 @@ namespace WebBlazor.Pages.Login.Services
         public async Task<string> createUserWithEmailAndPassword(string email, string password, string displayName)
         {
             var userId = await _jsRuntime.InvokeAsync<string>("firebaseAuth.createUserWithEmailAndPassword", email, password, displayName);
-            if (userId != null)
-            {
-                await _jsRuntime.InvokeVoidAsync("localStorageHelper.setItem", UserIdKey, userId);
-                OnChangeLogin?.Invoke();
-            }
+            //if (userId != null)
+            //{
+            //    await _jsRuntime.InvokeVoidAsync("localStorageHelper.setItem", UserIdKey, userId);
+            //    OnChangeLogin?.Invoke();
+            //}
             return userId;
         }
 

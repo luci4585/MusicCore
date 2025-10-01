@@ -25,7 +25,7 @@ namespace Service.Services
             //_endpoint = Properties.Resources.ApiUrlLocal+ApiEndpoints.GetEndpoint(typeof(T).Name);
         }
 
-        public async Task<List<T>?> GetAllAsync(string? filtro = null)
+        public async Task<List<T>?> GetAllAsync(string? filtro = "")
         {
             var response = await _httpClient.GetAsync(_endpoint);
             var content = await response.Content.ReadAsStringAsync();
