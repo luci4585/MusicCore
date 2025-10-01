@@ -115,7 +115,8 @@ namespace Backend.Controllers
                 return NotFound();
             }
 
-            _context.DiscoVenta.Remove(discoVenta);
+            discoVenta.IsDeleted = true; //soft delete
+            _context.DiscoVenta.Update(discoVenta);
             await _context.SaveChangesAsync();
 
             return NoContent();
