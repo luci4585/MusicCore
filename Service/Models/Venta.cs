@@ -16,20 +16,21 @@ namespace Service.Models
         public int ClienteId { get; set; }
         public Cliente? Cliente { get; set; }
 
+        public int UsuarioId { get; set; }
+        public Usuario? Usuario { get; set; }
+
+        public int DiscoId { get; set; }
+        public Disco? Disco { get; set; }
+
         public int Cantidad { get; set; }
         public bool IsDeleted { get; set; } = false;
 
         // Relación con muchos discos
-        public ICollection<DiscoVenta> DiscoVentas { get; set; } = new List<DiscoVenta>();
+        //public ICollection<DiscoVenta> DiscoVentas { get; set; } = new List<DiscoVenta>();
 
         public override string ToString()
         {
-            // Creamos un string con los títulos de los discos vendidos
-            string discos = DiscoVentas != null && DiscoVentas.Any()
-                             ? string.Join(", ", DiscoVentas.Select(dv => dv.Disco?.Titulo ?? "Sin título"))
-                             : "Sin discos";
-
-            return $"Fecha: {Fecha}, Precio: {Precio}, Cantidad: {Cantidad}, Cliente: {Cliente?.Nombre ?? "Sin cliente"}, Discos: {discos}";
+            return $"Fecha: {Fecha}, Precio: {Precio}, Cantidad: {Cantidad}, Cliente: {Cliente?.Nombre ?? "Sin cliente"}, Discos: {Disco?.Titulo}";
         }
 
     }

@@ -170,12 +170,12 @@ namespace Desktop.Views
 
         private async void BtnBuscar_Click(object sender, EventArgs e)
         {
-            GridDiscos.DataSource = await _discoService.GetAllAsync(TxtBuscar.Text);
+            GridDiscos.DataSource = _discos.Where(p => p.Titulo.ToUpper().Contains(TxtBuscar.Text.ToUpper())).ToList();
         }
 
         private void TxtBuscar_TextChanged(object sender, EventArgs e)
         {
-            BtnBuscar.PerformClick();
+            //BtnBuscar.PerformClick();
         }
 
         private void TimerStatusBar_Tick(object sender, EventArgs e)

@@ -6,7 +6,7 @@ namespace WebBlazor.Pages.Login.Services
     public class FirebaseAuthService
     {
         private readonly IJSRuntime _jsRuntime;
-        private const string UserIdKey = "agoraUser";
+        private const string UserIdKey = "musicCoreUser";
         public event Action OnChangeLogin;
 
         public FirebaseAuthService(IJSRuntime jsRuntime)
