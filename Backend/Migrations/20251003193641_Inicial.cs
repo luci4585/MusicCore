@@ -241,6 +241,15 @@ namespace Backend.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Usuario",
+                columns: new[] { "Id", "Email", "IsDeleted", "NombreUsuario", "Password", "TipoUsuario" },
+                values: new object[,]
+                {
+                    { 1, "admin@gmail.com", false, "admin", "admin123", 0 },
+                    { 2, "user@gmail.com", false, "user", "user123", 0 }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Discos",
                 columns: new[] { "Id", "ArtistaId", "GeneroId", "IsDeleted", "Titulo" },
                 values: new object[,]
@@ -265,9 +274,9 @@ namespace Backend.Migrations
                 columns: new[] { "Id", "Cantidad", "ClienteId", "DiscoId", "Fecha", "IsDeleted", "Precio", "UsuarioId" },
                 values: new object[,]
                 {
-                    { 1, 1, 1, 1, new DateTime(2025, 10, 3, 16, 26, 16, 572, DateTimeKind.Local).AddTicks(5251), false, 19.99m, 1 },
-                    { 2, 1, 2, 2, new DateTime(2025, 10, 3, 16, 26, 16, 572, DateTimeKind.Local).AddTicks(5265), false, 9.99m, 1 },
-                    { 3, 1, 3, 3, new DateTime(2025, 10, 3, 16, 26, 16, 572, DateTimeKind.Local).AddTicks(5267), false, 14.99m, 1 }
+                    { 1, 1, 1, 1, new DateTime(2025, 10, 3, 16, 36, 40, 734, DateTimeKind.Local).AddTicks(2261), false, 19.99m, 1 },
+                    { 2, 1, 2, 2, new DateTime(2025, 10, 3, 16, 36, 40, 734, DateTimeKind.Local).AddTicks(2272), false, 9.99m, 1 },
+                    { 3, 1, 3, 3, new DateTime(2025, 10, 3, 16, 36, 40, 734, DateTimeKind.Local).AddTicks(2274), false, 14.99m, 1 }
                 });
 
             migrationBuilder.CreateIndex(

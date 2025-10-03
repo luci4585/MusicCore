@@ -317,6 +317,26 @@ namespace Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Usuario");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "admin@gmail.com",
+                            IsDeleted = false,
+                            NombreUsuario = "admin",
+                            Password = "admin123",
+                            TipoUsuario = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "user@gmail.com",
+                            IsDeleted = false,
+                            NombreUsuario = "user",
+                            Password = "user123",
+                            TipoUsuario = 0
+                        });
                 });
 
             modelBuilder.Entity("Service.Models.Venta", b =>
@@ -365,7 +385,7 @@ namespace Backend.Migrations
                             Cantidad = 1,
                             ClienteId = 1,
                             DiscoId = 1,
-                            Fecha = new DateTime(2025, 10, 3, 16, 26, 16, 572, DateTimeKind.Local).AddTicks(5251),
+                            Fecha = new DateTime(2025, 10, 3, 16, 36, 40, 734, DateTimeKind.Local).AddTicks(2261),
                             IsDeleted = false,
                             Precio = 19.99m,
                             UsuarioId = 1
@@ -376,7 +396,7 @@ namespace Backend.Migrations
                             Cantidad = 1,
                             ClienteId = 2,
                             DiscoId = 2,
-                            Fecha = new DateTime(2025, 10, 3, 16, 26, 16, 572, DateTimeKind.Local).AddTicks(5265),
+                            Fecha = new DateTime(2025, 10, 3, 16, 36, 40, 734, DateTimeKind.Local).AddTicks(2272),
                             IsDeleted = false,
                             Precio = 9.99m,
                             UsuarioId = 1
@@ -387,7 +407,7 @@ namespace Backend.Migrations
                             Cantidad = 1,
                             ClienteId = 3,
                             DiscoId = 3,
-                            Fecha = new DateTime(2025, 10, 3, 16, 26, 16, 572, DateTimeKind.Local).AddTicks(5267),
+                            Fecha = new DateTime(2025, 10, 3, 16, 36, 40, 734, DateTimeKind.Local).AddTicks(2274),
                             IsDeleted = false,
                             Precio = 14.99m,
                             UsuarioId = 1
