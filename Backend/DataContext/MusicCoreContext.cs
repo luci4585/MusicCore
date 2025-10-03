@@ -23,18 +23,18 @@ namespace Backend.DataContext
         {
             base.OnModelCreating(modelBuilder);
 
-            // Clave primaria compuesta para DiscoVenta
+            // Clave primaria compuesta
             modelBuilder.Entity<DiscoVenta>()
                 .HasKey(dv => new { dv.VentaId, dv.DiscoId });
 
             modelBuilder.Entity<DiscoVenta>()
                 .HasOne(dv => dv.Venta)
-                .WithMany(v => v.DiscoVentas)
+                .WithMany() // sin ICollection en Venta
                 .HasForeignKey(dv => dv.VentaId);
 
             modelBuilder.Entity<DiscoVenta>()
                 .HasOne(dv => dv.Disco)
-                .WithMany(d => d.DiscoVentas)
+                .WithMany()
                 .HasForeignKey(dv => dv.DiscoId);
 
             //Cargamos datos iniciales de artistas de musica
@@ -74,9 +74,9 @@ namespace Backend.DataContext
 
             //Cargamos datos iniciales de ventas
             modelBuilder.Entity<Venta>().HasData(
-                new Venta { Id = 1, Fecha = DateTime.Now, Precio = 95000, Cantidad = 1, ClienteId = 1 },
-                new Venta { Id = 2, Fecha = DateTime.Now, Precio = 70000, Cantidad = 2, ClienteId = 2, },
-                new Venta { Id = 3, Fecha = DateTime.Now, Precio = 80000, Cantidad = 1, ClienteId = 3, }
+                new Venta { Id = 1, Fecha = DateTime.Now, Precio = 19.99M, ClienteId = 1, UsuarioId = 1, DiscoId = 1, Cantidad = 1 },
+                new Venta { Id = 2, Fecha = DateTime.Now, Precio = 9.99M, ClienteId = 2, UsuarioId = 1, DiscoId = 2,  Cantidad = 1 },
+                new Venta { Id = 3, Fecha = DateTime.Now, Precio = 14.99M, ClienteId = 3, UsuarioId = 1, DiscoId = 3,  Cantidad = 1 }
             );
 
 
