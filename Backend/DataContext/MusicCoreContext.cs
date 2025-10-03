@@ -37,6 +37,12 @@ namespace Backend.DataContext
                 .WithMany()
                 .HasForeignKey(dv => dv.DiscoId);
 
+            //Cargamos datos iniciales de usuarios
+            modelBuilder.Entity<Usuario>().HasData(
+                new Usuario { Id = 1, NombreUsuario = "admin", Email = "admin@gmail.com", Password = "admin123"},
+                new Usuario { Id = 2, NombreUsuario = "user", Email = "user@gmail.com", Password = "user123" }
+             );
+
             //Cargamos datos iniciales de artistas de musica
             modelBuilder.Entity<Artista>().HasData(
                 new Artista { Id = 1, Nombre = "The Beatles" },
