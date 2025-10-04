@@ -80,9 +80,9 @@ namespace Backend.DataContext
 
             //Cargamos datos iniciales de ventas
             modelBuilder.Entity<Venta>().HasData(
-                new Venta { Id = 1, Fecha = DateTime.Now, Precio = 19.99M, ClienteId = 1, UsuarioId = 1, DiscoId = 1, Cantidad = 1 },
-                new Venta { Id = 2, Fecha = DateTime.Now, Precio = 9.99M, ClienteId = 2, UsuarioId = 1, DiscoId = 2,  Cantidad = 1 },
-                new Venta { Id = 3, Fecha = DateTime.Now, Precio = 14.99M, ClienteId = 3, UsuarioId = 1, DiscoId = 3,  Cantidad = 1 }
+                new Venta { Id = 1, Fecha = DateTime.Now, Precio = 10000, ClienteId = 1, UsuarioId = 1, DiscoId = 1, Cantidad = 1 },
+                new Venta { Id = 2, Fecha = DateTime.Now, Precio = 12000, ClienteId = 2, UsuarioId = 1, DiscoId = 2,  Cantidad = 3 },
+                new Venta { Id = 3, Fecha = DateTime.Now, Precio = 15000, ClienteId = 3, UsuarioId = 1, DiscoId = 3,  Cantidad = 5 }
             );
 
 

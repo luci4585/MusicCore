@@ -133,8 +133,8 @@ namespace Desktop.Views
             }
             else
             {
-                var nuevacapacitacion = await _discoService.AddAsync(discoAGuardar);
-                response = nuevacapacitacion != null;
+                var nuevodisco = await _discoService.AddAsync(discoAGuardar);
+                response = nuevodisco != null;
             }
             if (response)
             {
@@ -147,7 +147,7 @@ namespace Desktop.Views
             }
             else
             {
-                MessageBox.Show("Error al agregar la capacitacion", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error al agregar el disco", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -164,7 +164,7 @@ namespace Desktop.Views
             }
             else
             {
-                MessageBox.Show("Debe seleccionar una Capacitacion para modificarla", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Debe seleccionar un disco para modificarla", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -209,19 +209,19 @@ namespace Desktop.Views
                 {
                     if (await _discoService.RestoreAsync(entitySelected.Id))
                     {
-                        LabelStatusMessage.Text = $"Capacitación {entitySelected.Titulo} restaurada correctamente";
+                        LabelStatusMessage.Text = $"Disco {entitySelected.Titulo} restaurado correctamente";
                         TimerStatusBar.Start();
                         await GetAllData();
                     }
                     else
                     {
-                        MessageBox.Show("Error al restaurar la capacitacion", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Error al restaurar el disco", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
             else
             {
-                MessageBox.Show("Debe seleccionar una capacitación para restaurar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Debe seleccionar un disco para restaurar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
