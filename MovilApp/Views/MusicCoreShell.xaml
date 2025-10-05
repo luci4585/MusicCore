@@ -7,6 +7,7 @@
     xmlns:local="clr-namespace:MovilApp"
     xmlns:login="clr-namespace:MovilApp.Views.Login"
     xmlns:contentviews="clr-namespace:MovilApp.ContentViews"
+    xmlns:views="clr-namespace:MovilApp.Views"
     xmlns:viewmodels="clr-namespace:MovilApp.ViewModels"
     FlyoutBehavior="Disabled"
     Title="MusicCoreApp">
@@ -23,13 +24,33 @@
         <contentviews:FlyoutFooter />
     </Shell.FlyoutFooter>
 
-    <FlyoutItem Route="mi_app" 
+    <FlyoutItem Route="nuestra_app" 
         FlyoutDisplayOptions="AsMultipleItems" x:Name="FlyoutItemsPrincipal" >
         <ShellContent
             Title="Home"
             ContentTemplate="{DataTemplate local:MainPage}"
             Route="MainPage" />
 
+        <!--<Tab Title="Carreras"
+         Route="carreras"
+         Icon="paw.png">
+            <ShellContent
+                Title="Lista"
+                Icon="cat.png"
+                ContentTemplate="{DataTemplate commons:CarrerasView}"
+                Route="ListaCarreras" />
+            <ShellContent
+                Title="Agregar carrera"
+                Icon="dog.png"
+                ContentTemplate="{DataTemplate commons:AddEditCarreraView}"
+                Route="AgregarEditarCarrera" />
+        </Tab>-->
+    </FlyoutItem>
+    <FlyoutItem Title="📖 Buscar Discos" Icon="search.png">
+        <ShellContent
+            Title="Buscar Discos"
+            ContentTemplate="{DataTemplate views:DiscosView}"
+            Route="BuscarDiscos" />
     </FlyoutItem>
     <MenuItem Text="Cerrar sesión"
       Command="{Binding LogoutCommand}"
