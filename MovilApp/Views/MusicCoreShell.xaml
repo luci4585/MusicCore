@@ -7,7 +7,7 @@
     xmlns:local="clr-namespace:MovilApp"
     xmlns:login="clr-namespace:MovilApp.Views.Login"
     xmlns:contentviews="clr-namespace:MovilApp.ContentViews"
-    xmlns:views="clr-namespace:MovilApp.Views"
+    xmlns:views="clr-namespace:MovilApp.Views.Admin"
     xmlns:viewmodels="clr-namespace:MovilApp.ViewModels"
     FlyoutBehavior="Disabled"
     Title="MusicCoreApp">
@@ -24,28 +24,42 @@
         <contentviews:FlyoutFooter />
     </Shell.FlyoutFooter>
 
-    <FlyoutItem Route="nuestra_app" 
-        FlyoutDisplayOptions="AsMultipleItems" x:Name="FlyoutItemsPrincipal" >
-        <ShellContent
-            Title="Home"
-            ContentTemplate="{DataTemplate local:MainPage}"
-            Route="MainPage" />
+    <ShellContent
+    Title="Iniciar sesión"
+    ContentTemplate="{DataTemplate login:LoginView}"
+    Route="Login"
+    FlyoutItemIsVisible="False"/>
 
-        <!--<Tab Title="Carreras"
-         Route="carreras"
-         Icon="paw.png">
+    <ShellContent
+    Title="Crear cuenta"
+    ContentTemplate="{DataTemplate login:SignInView}"
+    Route="Registrarse"
+    FlyoutItemIsVisible="False"/>
+
+    <FlyoutItem Route="nuestra_app" 
+    FlyoutDisplayOptions="AsMultipleItems" >
+        <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
+
+
+        <Tab Title="Admin Capacitaciones"
+     Route="capacitaciones"
+     Icon="paw.png">
             <ShellContent
-                Title="Lista"
-                Icon="cat.png"
-                ContentTemplate="{DataTemplate commons:CarrerasView}"
-                Route="ListaCarreras" />
+            Title="Lista"
+            Icon="cat.png"
+            ContentTemplate="{DataTemplate admin:AdminDiscosView}"
+            Route="AdminCapacitaciones" />
             <ShellContent
-                Title="Agregar carrera"
-                Icon="dog.png"
-                ContentTemplate="{DataTemplate commons:AddEditCarreraView}"
-                Route="AgregarEditarCarrera" />
-        </Tab>-->
+            Title="Agregar carrera"
+            Icon="dog.png"
+            ContentTemplate="{DataTemplate admin:AddEditDiscoView}"
+            Route="AdminCapacitacion" />
+        </Tab>
     </FlyoutItem>
+
     <FlyoutItem Title="📖 Buscar Discos" Icon="search.png">
         <ShellContent
             Title="Buscar Discos"

@@ -27,6 +27,9 @@ namespace MovilApp.ViewModels.Login
         [ObservableProperty]
         private bool recordarContraseña;
 
+        [ObservableProperty]
+        private bool estaDescargando;
+
 
         public IRelayCommand IniciarSesionCommand { get; }
         public IRelayCommand RegistrarseCommand { get; }
@@ -36,8 +39,8 @@ namespace MovilApp.ViewModels.Login
 
             _clientAuth = new FirebaseAuthClient(new FirebaseAuthConfig()
             {
-                //ApiKey = Service.Properties.Resources.ApiKeyFirebase,
-                //AuthDomain = Service.Properties.Resources.AuthDomainFirebase,
+                ApiKey = Service.Properties.Resources.ApiKeyFirebase,
+                AuthDomain = Service.Properties.Resources.AuthDomainFirebase,
                 Providers = new Firebase.Auth.Providers.FirebaseAuthProvider[]
                 {
                     new EmailProvider()
@@ -51,17 +54,34 @@ namespace MovilApp.ViewModels.Login
 
         private async void Registrarse()
         {
-            await Shell.Current.GoToAsync("Registrarse");
+            if (Application.Current?.MainPage is MusicCoreShell shell)
+            {
+                await shell.GoToAsync($"//Registrarse");
+            }
         }
 
         private async void ChequearSiHayUsuarioAlmacenado()
         {
-            if (_userRepository.UserExists())
+            //_userRepository.DeleteUser();
+            if (DeviceInfo.Platform == DevicePlatform.Android ||
+               DeviceInfo.Platform == DevicePlatform.iOS)
             {
-                (_userInfo, _firebaseCredential) = _userRepository.ReadUser();
+                try
+                {
+                    if (_userRepository.UserExists())
+                    {
+                        (_userInfo, _firebaseCredential) = _userRepository.ReadUser();
 
-                var musicCoreShell = (MusicCoreShell)App.Current.MainPage;
-                //musicCoreShell.EnableAppAfterLogin();
+                        if (Application.Current?.MainPage is MusicCoreShell musicCoreShell)
+                        {
+                            musicCoreShell.SetLoginState(true);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "Ocurrió un problema al leer el usuario almacenado: " + ex.Message, "Ok");
+                }
             }
         }
 
@@ -74,13 +94,14 @@ namespace MovilApp.ViewModels.Login
         {
             try
             {
-
+                EstaDescargando = true;
                 var userCredential = await _clientAuth.SignInWithEmailAndPasswordAsync(email, password);
-                //if (userCredential.User.Info.IsEmailVerified == false)
-                //{
-                //    await Application.Current.MainPage.DisplayAlert("Inicio de sesión", "Debe verificar su correo electrónico", "Ok");
-                //    return;
-                //}
+                if (userCredential.User.Info.IsEmailVerified == false)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Inicio de sesión", "Debe verificar su correo electrónico", "Ok");
+                    EstaDescargando = false;
+                    return;
+                }
 
                 if (recordarContraseña)
                 {
@@ -91,16 +112,17 @@ namespace MovilApp.ViewModels.Login
                     _userRepository.DeleteUser();
                 }
 
-                var musicCoreShell = (MusicCoreShell)App.Current.MainPage;
-                //musicCoreShell.EnableAppAfterLogin();
-
+                if (Application.Current?.MainPage is MusicCoreShell musicCoreShell)
+                {
+                    musicCoreShell.SetLoginState(true);
+                }
+                EstaDescargando = false;
             }
             catch (FirebaseAuthException error)
             {
                 await Application.Current.MainPage.DisplayAlert("Inicio de sesión", "Ocurrió un problema:" + error.Reason, "Ok");
 
             }
-
         }
     }
 }

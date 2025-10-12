@@ -2,6 +2,11 @@
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
 using Firebase.Auth.Providers;
+using Firebase.Auth.Repository;
+using Service.Enums;
+using MovilApp.Views;
+using Service.Models;
+using Service.Services;
 using System.Net.Http.Headers;
 
 namespace MovilApp.ViewModels.Login
@@ -9,37 +14,65 @@ namespace MovilApp.ViewModels.Login
     public partial class SignInViewModel : ObservableObject
     {
         private readonly FirebaseAuthClient _clientAuth;
+        GenericService<Usuario> _usuarioService = new();
         private readonly string FirebaseApiKey;
         private readonly string RequestUri;
 
         public IRelayCommand RegistrarseCommand { get; }
+        public IRelayCommand VolverCommand { get; }
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RegistrarseCommand))]
         private string nombre;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RegistrarseCommand))]
+        private string lastnombre;
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RegistrarseCommand))]
+        private string dni;
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RegistrarseCommand))]
         private string email;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RegistrarseCommand))]
         private string password;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RegistrarseCommand))]
         private string verifyPassword;
 
         public SignInViewModel()
         {
-            //FirebaseApiKey = Service.Properties.Resources.ApiKeyFirebase;
-            //RequestUri = "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" + FirebaseApiKey;
-            //RegistrarseCommand = new RelayCommand(Registrarse);
-            //_clientAuth = new FirebaseAuthClient(new FirebaseAuthConfig()
-            //{
-            //    ApiKey = FirebaseApiKey,
-            //    AuthDomain = Service.Properties.Resources.AuthDomainFirebase,
-            //    Providers = new Firebase.Auth.Providers.FirebaseAuthProvider[]
-            //    {
-            //            new EmailProvider()
-            //    }
-            //});
+            FirebaseApiKey = Service.Properties.Resources.ApiKeyFirebase;
+            RequestUri = "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" + FirebaseApiKey;
+            RegistrarseCommand = new RelayCommand(Registrarse, PermitirRegistrarse);
+            VolverCommand = new AsyncRelayCommand(Volver);
+            _clientAuth = new FirebaseAuthClient(new FirebaseAuthConfig()
+            {
+                ApiKey = FirebaseApiKey,
+                AuthDomain = Service.Properties.Resources.AuthDomainFirebase,
+                Providers = new Firebase.Auth.Providers.FirebaseAuthProvider[]
+                {
+                        new EmailProvider()
+                }
+            });
+        }
+
+        private bool PermitirRegistrarse()
+        {
+            return !string.IsNullOrEmpty(nombre) && !string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(verifyPassword);
+        }
+
+        private async Task Volver()
+        {
+            if (Application.Current?.MainPage is MusicCoreShell shell)
+            {
+                await shell.GoToAsync($"//Login");
+            }
         }
 
         private async void Registrarse()
@@ -53,9 +86,23 @@ namespace MovilApp.ViewModels.Login
             {
                 try
                 {
-                    var user = await _clientAuth.CreateUserWithEmailAndPasswordAsync(email, password, nombre);
+                    var fullname = nombre + " " + lastnombre;
+                    var user = await _clientAuth.CreateUserWithEmailAndPasswordAsync(email, password, fullname);
+                    var nuevoUsuario = new Usuario
+                    {
+                        NombreUsuario = nombre,
+                        //Apellido = lastnombre,
+                        //Dni = dni,
+                        Email = email,
+                        TipoUsuario = TipoUsuarioEnum.Administrador,
+                        IsDeleted = false
+                    };
                     await SendVerificationEmailAsync(user.User.GetIdTokenAsync().Result);
                     await Application.Current.MainPage.DisplayAlert("Registrarse", "Cuenta creada!", "Ok");
+                    if (Application.Current?.MainPage is MusicCoreShell shell)
+                    {
+                        await shell.GoToAsync($"//Login");
+                    }
                 }
                 catch (FirebaseAuthException error) // Use alias here 
                 {
