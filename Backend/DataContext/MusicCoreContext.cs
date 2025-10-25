@@ -47,7 +47,8 @@ namespace Backend.DataContext
             modelBuilder.Entity<Artista>().HasData(
                 new Artista { Id = 1, Nombre = "The Beatles" },
                 new Artista { Id = 2, Nombre = "Michael Jackson" },
-                new Artista { Id = 3, Nombre = "Madonna" }
+                new Artista { Id = 3, Nombre = "Madonna" },
+                new Artista { Id = 4, Nombre = "Kiss" }
             );
 
             //Cargamos datos iniciales de generos musicales

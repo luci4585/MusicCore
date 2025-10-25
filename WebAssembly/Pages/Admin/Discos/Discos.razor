@@ -7,7 +7,7 @@
 
 <PageTitle>Discos</PageTitle>
 
-<h1>Discos</h1>
+<PageHeader Title="Discos" Description="Administra aquí los discos" />
 
 @if (discos == null)
 {
@@ -61,7 +61,7 @@ else
         //cronometramos el tiempo de carga
         var stopwatch = Stopwatch.StartNew();
         //ejecutamos las tareas de manera concurrente asignando a las listas los datos obtenidos
-        discos = await _discoService.GetAllAsync();
+        discos = await _discoService.GetAllAsync(null);
 
         stopwatch.Stop();
         _logger.LogInformation($"Tiempo de carga: {stopwatch.ElapsedMilliseconds} ms");

@@ -57,14 +57,14 @@ namespace Desktop.Views
             }
             var ventasParaMostrar = _ventas.Select(v => new
     {
-        Fecha = v.Fecha.ToShortDateString(),
-        Precio = Math.Round(v.Precio, 2),
-        Cliente = _clientes.FirstOrDefault(c => c.Id == v.ClienteId)?.Nombre,
-        Disco = _discos.FirstOrDefault(d => d.Id == v.DiscoId)?.Titulo,
-        Cantidad = v.Cantidad
-    }).ToList();
+                Fecha = v.Fecha.ToShortDateString(),
+                Precio = Math.Round(v.Precio, 2),
+                Cliente = _clientes.FirstOrDefault(c => c.Id == v.ClienteId)?.Nombre,
+                Disco = _discos.FirstOrDefault(d => d.Id == v.DiscoId)?.Titulo,
+                Cantidad = v.Cantidad
+            }).ToList();
 
-    GridVentas.DataSource = ventasParaMostrar;
+            GridVentas.DataSource = ventasParaMostrar;
         }
 
         private async Task GetComboDisco()
@@ -120,7 +120,7 @@ namespace Desktop.Views
         private void BtnAgregarr_Click(object sender, EventArgs e)
         {
             LimpiarControlesAgregarEditar();
-            TabControl.SelectTab("TabpageAgregarEditar");
+            TabControl.SelectedTab=TabPageAgregarEditar;
         }
 
         private void LimpiarControlesAgregarEditar()
