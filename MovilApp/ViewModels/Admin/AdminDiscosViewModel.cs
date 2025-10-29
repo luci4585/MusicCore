@@ -19,8 +19,8 @@ namespace MovilApp.ViewModels.Admin
         private ObservableCollection<Disco> discos;
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(EditDisco))]
-        [NotifyCanExecuteChangedFor(nameof(DeleteDisco))]
+        [NotifyCanExecuteChangedFor(nameof(EditCommand))]
+        [NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
         private Disco discoCurrent;
 
         [ObservableProperty]
