@@ -1,4 +1,5 @@
-﻿using Service.Models;
+﻿using Desktop.ViewReports;
+using Service.Models;
 using Service.Services;
 using System;
 using System.Collections.Generic;
@@ -230,6 +231,13 @@ namespace Desktop.Views
             await GetAllData();
         }
 
+        private void BtnImprimirDiscos_Click(object sender, EventArgs e)
+        {
+            var selectedDiscos = GridDiscos.DataSource as List<DiscosView>;
 
+            var discosViewReport = new DiscosViewReport(selectedDiscos);
+            discosViewReport.MdiParent = this.MdiParent;
+            discosViewReport.Show();
+        }
     }
 } 

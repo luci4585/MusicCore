@@ -1,4 +1,6 @@
-﻿using Microsoft.Reporting.WinForms;
+﻿using Desktop.Views;
+using Microsoft.Reporting.WinForms;
+using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,10 +16,13 @@ namespace Desktop.ViewReports
     public partial class DiscosViewReport : Form
     {
         ReportViewer _report;
-        public DiscosViewReport()
+        List<DiscosView> _disco;
+
+        public DiscosViewReport(List<DiscosView> disco)
         {
             InitializeComponent();
             _report = new ReportViewer();
+            _disco = disco;
             _report.Dock = DockStyle.Fill;
             this.Controls.Add(_report);
         }
