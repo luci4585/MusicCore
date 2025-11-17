@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="MusicCoreDataset" targetNamespace="http://tempuri.org/MusicCoreDataset.xsd" xmlns:mstns="http://tempuri.org/MusicCoreDataset.xsd" xmlns="http://tempuri.org/MusicCoreDataset.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="MusicCoreDataset" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_UserDSName="MusicCoreDataset" msprop:Generator_DataSetName="MusicCoreDataset">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ListaDiscos" msprop:Generator_RowEvHandlerName="ListaDiscosRowChangeEventHandler" msprop:Generator_RowDeletedName="ListaDiscosRowDeleted" msprop:Generator_RowDeletingName="ListaDiscosRowDeleting" msprop:Generator_RowEvArgName="ListaDiscosRowChangeEvent" msprop:Generator_TablePropName="ListaDiscos" msprop:Generator_RowChangedName="ListaDiscosRowChanged" msprop:Generator_RowChangingName="ListaDiscosRowChanging" msprop:Generator_TableClassName="ListaDiscosDataTable" msprop:Generator_RowClassName="ListaDiscosRow" msprop:Generator_TableVarName="tableListaDiscos" msprop:Generator_UserTableName="ListaDiscos">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Titulo" msprop:Generator_ColumnPropNameInRow="Titulo" msprop:Generator_ColumnPropNameInTable="TituloColumn" msprop:Generator_ColumnVarNameInTable="columnTitulo" msprop:Generator_UserColumnName="Titulo" type="xs:string" minOccurs="0" />
+              <xs:element name="Artista" msprop:Generator_ColumnPropNameInRow="Artista" msprop:Generator_ColumnPropNameInTable="ArtistaColumn" msprop:Generator_ColumnVarNameInTable="columnArtista" msprop:Generator_UserColumnName="Artista" type="xs:string" minOccurs="0" />
+              <xs:element name="Genero" msprop:Generator_ColumnPropNameInRow="Genero" msprop:Generator_ColumnPropNameInTable="GeneroColumn" msprop:Generator_ColumnVarNameInTable="columnGenero" msprop:Generator_UserColumnName="Genero" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

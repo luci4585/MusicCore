@@ -29,7 +29,22 @@ namespace Desktop.ViewReports
 
         private void DiscosViewReport_Load(object sender, EventArgs e)
         {
+            _report.LocalReport.ReportEmbeddedResource = "Desktop.ViewReports.DiscosViewReport.rdlc";
+            var discos = _disco.Select(i => new
+            {
+                //agregar al reporte los campos que se desean mostrar
+                //Titulo = i.Titulo,
+                //Artista = i.Artista,
+                //Genero = i.Genero,
 
+            }).ToList();
+
+            _report.LocalReport.DataSources.Add(new ReportDataSource("DSDiscos", discos));
+            _report.SetDisplayMode(DisplayMode.PrintLayout);
+            _report.ZoomMode = ZoomMode.Percent;
+            _report.ZoomPercent = 100;
+
+            _report.RefreshReport();
         }
     }
 }
