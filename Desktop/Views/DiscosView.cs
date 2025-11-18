@@ -39,20 +39,27 @@ namespace Desktop.Views
 
         private async Task GetAllData()
         {
-            GetComboArtistas();
-            GetComboGeneros();
-            _generos = await _generoService.GetAllAsync();
-            if (CheckVerEliminados.Checked)
+            try
             {
-                _discos = await _discoService.GetAllDeletedsAsync();
+                await GetComboArtistas();
+                await GetComboGeneros();
+
+                if (CheckVerEliminados.Checked)
+                {
+                    _discos = await _discoService.GetAllDeletedsAsync();
+                }
+                else
+                {
+                    _discos = await _discoService.GetAllAsync();
+                }
+                GridDiscos.DataSource = _discos;
+                GridDiscos.Columns["Id"].Visible = false;
+                GridDiscos.Columns["IsDeleted"].Visible = false;
             }
-            else
+            catch(Exception ex)
             {
-                _discos = await _discoService.GetAllAsync();
+                MessageBox.Show($"Error al obtener los datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            GridDiscos.DataSource = _discos;
-            GridDiscos.Columns["Id"].Visible = false;
-            GridDiscos.Columns["IsDeleted"].Visible = false;
         }
 
         private async Task GetComboGeneros()
@@ -233,7 +240,7 @@ namespace Desktop.Views
 
         private void BtnImprimirDiscos_Click(object sender, EventArgs e)
         {
-            var selectedDiscos = GridDiscos.DataSource as List<DiscosView>;
+            var selectedDiscos = GridDiscos.DataSource as List<Disco>;
 
             var discosViewReport = new DiscosViewReport(selectedDiscos);
             discosViewReport.MdiParent = this.MdiParent;

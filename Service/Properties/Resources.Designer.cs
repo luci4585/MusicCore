@@ -79,7 +79,7 @@ namespace Service.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a https://localhost:7000/swagger/index.html.
+        ///   Busca una cadena traducida similar a https://localhost:7000/api/.
         /// </summary>
         public static string ApiUrlLocal {
             get {

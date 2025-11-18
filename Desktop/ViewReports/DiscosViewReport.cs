@@ -16,26 +16,26 @@ namespace Desktop.ViewReports
     public partial class DiscosViewReport : Form
     {
         ReportViewer _report;
-        List<DiscosView> _disco;
+        List<Disco> _discos;
 
-        public DiscosViewReport(List<DiscosView> disco)
+        public DiscosViewReport(List<Disco> discos)
         {
             InitializeComponent();
             _report = new ReportViewer();
-            _disco = disco;
+            _discos = discos;
             _report.Dock = DockStyle.Fill;
             this.Controls.Add(_report);
         }
 
         private void DiscosViewReport_Load(object sender, EventArgs e)
         {
-            _report.LocalReport.ReportEmbeddedResource = "Desktop.ViewReports.DiscosViewReport.rdlc";
-            var discos = _disco.Select(i => new
+            _report.LocalReport.ReportEmbeddedResource = "Desktop.Reports.DiscosReport.rdlc";
+            var discos = _discos.Select(i => new
             {
                 //agregar al reporte los campos que se desean mostrar
-                //Titulo = i.Titulo,
-                //Artista = i.Artista,
-                //Genero = i.Genero,
+                Titulo = i.Titulo,
+                Artista = i.Artista?.Nombre,
+                Genero = i.Genero?.Nombre
 
             }).ToList();
 
