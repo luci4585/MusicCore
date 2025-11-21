@@ -29,25 +29,25 @@ namespace Desktop.Views
         {
             InitializeComponent();
             _ = GetAllData();
-            CheckVerEliminadoss.CheckedChanged += DisplayHideControlsRestoreButton;
+            CheckVerEliminados.CheckedChanged += DisplayHideControlsRestoreButton;
         }
 
         private void DisplayHideControlsRestoreButton(object? sender, EventArgs e)
         {
-            BtnRestaurarr.Visible = CheckVerEliminadoss.Checked;
-            BtnEliminarr.Enabled = !CheckVerEliminadoss.Checked;
-            BtnModificarr.Enabled = !CheckVerEliminadoss.Checked;
-            BtnAgregarr.Enabled = !CheckVerEliminadoss.Checked;
-            BtnModificarr.Enabled = !CheckVerEliminadoss.Checked;
-            BtnBuscarr.Enabled = !CheckVerEliminadoss.Checked;
+            BtnRestaurar.Visible = CheckVerEliminados.Checked;
+            BtnEliminar.Enabled = !CheckVerEliminados.Checked;
+            BtnModificar.Enabled = !CheckVerEliminados.Checked;
+            BtnAgregar.Enabled = !CheckVerEliminados.Checked;
+            BtnModificar.Enabled = !CheckVerEliminados.Checked;
+            BtnBuscar.Enabled = !CheckVerEliminados.Checked;
         }
 
         private async Task GetAllData()
         {
             GetComboCliente();
             GetComboDisco();
-            _clientes = await _clienteService.GetAllAsync();
-            if (CheckVerEliminadoss.Checked)
+
+            if (CheckVerEliminados.Checked)
             {
                 _ventas = await _ventaService.GetAllDeletedsAsync();
             }
@@ -56,7 +56,7 @@ namespace Desktop.Views
                 _ventas = await _ventaService.GetAllAsync();
             }
             var ventasParaMostrar = _ventas.Select(v => new
-    {
+            {
                 Fecha = v.Fecha.ToShortDateString(),
                 Precio = Math.Round(v.Precio, 2),
                 Cliente = _clientes.FirstOrDefault(c => c.Id == v.ClienteId)?.Nombre,
@@ -85,12 +85,12 @@ namespace Desktop.Views
             ComboCliente.SelectedIndex = -1;
         }
 
-        private void BtnSalirr_Click(object sender, EventArgs e)
+        private void BtnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private async void BtnEliminarr_Click(object sender, EventArgs e)
+        private async void BtnEliminar_Click(object sender, EventArgs e)
         {
             //chequeamos que haya películas seleccionadas
             if (GridVentas.Rows.Count > 0 && GridVentas.SelectedRows.Count > 0)
@@ -102,7 +102,7 @@ namespace Desktop.Views
                     if (await _ventaService.DeleteAsync(entitySelected.Id))
                     {
                         LabelStatusMessage.Text = $"Venta eliminada correctamente";
-                        TimerStatusBarr.Start();
+                        TimerStatusBar.Start();
                         await GetAllData();
                     }
                     else
@@ -117,7 +117,7 @@ namespace Desktop.Views
             }
         }
 
-        private void BtnAgregarr_Click(object sender, EventArgs e)
+        private void BtnAgregar_Click(object sender, EventArgs e)
         {
             LimpiarControlesAgregarEditar();
             TabControl.SelectedTab=TabPageAgregarEditar;
@@ -130,12 +130,12 @@ namespace Desktop.Views
             ComboCliente.SelectedIndex = -1;
         }
 
-        private void BtnCancelarr_Click(object sender, EventArgs e)
+        private void BtnCancelar_Click(object sender, EventArgs e)
         {
             TabControl.SelectTab("TabPageLista");
         }
 
-        private async void BtnGuardarr_Click(object sender, EventArgs e)
+        private async void BtnGuardar_Click(object sender, EventArgs e)
         {
             Venta ventaAGuardar = new Venta
             {
@@ -159,7 +159,7 @@ namespace Desktop.Views
             {
                 _currentVenta = null; // Reset the modified movie after saving
                 LabelStatusMessage.Text = $"Venta {ventaAGuardar} guardada correctamente";
-                TimerStatusBarr.Start(); // Iniciar el temporizador para mostrar el mensaje en la barra de estado
+                TimerStatusBar.Start(); // Iniciar el temporizador para mostrar el mensaje en la barra de estado
                 await GetAllData();
                 LimpiarControlesAgregarEditar();
                 TabControl.SelectedTab = TabPageLista;
@@ -170,7 +170,7 @@ namespace Desktop.Views
             }
         }
 
-        private void BtnModificarr_Click(object sender, EventArgs e)
+        private void BtnModificar_Click(object sender, EventArgs e)
         {
             if (GridVentas.RowCount > 0 && GridVentas.SelectedRows.Count > 0)
             {
@@ -187,20 +187,20 @@ namespace Desktop.Views
             }
         }
 
-        private async void BtnBuscarr_Click(object sender, EventArgs e)
+        private async void BtnBuscar_Click(object sender, EventArgs e)
         {
-            GridVentas.DataSource = _discos.Where(p => p.Titulo.ToUpper().Contains(TxtBuscarr.Text.ToUpper())).ToList();
+            GridVentas.DataSource = _discos.Where(p => p.Titulo.ToUpper().Contains(TxtBuscar.Text.ToUpper())).ToList();
         }
 
-        private void TxtBuscarr_TextChanged(object sender, EventArgs e)
+        private void TxtBuscar_TextChanged(object sender, EventArgs e)
         {
-
+            //BtnBuscar.PerformClick();
         }
 
-        private void TimerStatusBarr_Tick(object sender, EventArgs e)
+        private void TimerStatusBar_Tick(object sender, EventArgs e)
         {
             LabelStatusMessage.Text = string.Empty;
-            TimerStatusBarr.Stop();
+            TimerStatusBar.Stop();
         }
 
         private void GridVentas_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -211,9 +211,9 @@ namespace Desktop.Views
             }
         }
 
-        private async void BtnRestaurarr_Click(object sender, EventArgs e)
+        private async void BtnRestaurar_Click(object sender, EventArgs e)
         {
-            if (!CheckVerEliminadoss.Checked) return;
+            if (!CheckVerEliminados.Checked) return;
 
             if (GridVentas.Rows.Count > 0 && GridVentas.SelectedRows.Count > 0)
             {
@@ -224,7 +224,7 @@ namespace Desktop.Views
                     if (await _ventaService.RestoreAsync(entitySelected.Id))
                     {
                         LabelStatusMessage.Text = $"Venta {entitySelected} restaurada correctamente";
-                        TimerStatusBarr.Start();
+                        TimerStatusBar.Start();
                         await GetAllData();
                     }
                     else
@@ -239,7 +239,7 @@ namespace Desktop.Views
             }
         }
 
-        private async void CheckVerEliminadoss_CheckedChanged(object sender, EventArgs e)
+        private async void CheckVerEliminados_CheckedChanged(object sender, EventArgs e)
         {
             await GetAllData();
         }
