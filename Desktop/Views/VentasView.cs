@@ -1,4 +1,5 @@
-﻿using Service.Models;
+﻿using Desktop.ExtensionMethod;
+using Service.Models;
 using Service.Services;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,6 @@ namespace Desktop.Views
             InitializeComponent();
             _ = GetAllData();
             CheckVerEliminados.CheckedChanged += DisplayHideControlsRestoreButton;
-            GridVentas.DataBindingComplete += GridVentas_DataBindingComplete;
         }
 
         private void DisplayHideControlsRestoreButton(object? sender, EventArgs e)
@@ -58,16 +58,24 @@ namespace Desktop.Views
             }
             GridVentas.DataSource = _ventas;
 
-            GridVentas.Columns["Fecha"].DefaultCellStyle.Format = "dd/MM/yyyy";
+            GridVentas.HideColumns("Id", "ClienteId", "UsuarioId", "DiscoId", "IsDeleted");
+            GridVentas.Columns["Precio"].DefaultCellStyle.Format = "C2";
+
+            if (GridVentas.Columns.Contains("Fecha"))
+            {
+                GridVentas.Columns["Fecha"].DefaultCellStyle.Format = "dd/MM/yyyy";
+            }
         }
 
         private async Task GetComboDisco()
         {
             _discos= await _discoService.GetAllAsync();
             ComboDisco.DataSource = _discos;
-            ComboDisco.DisplayMember = "Nombre";
+            ComboDisco.DisplayMember = "Titulo";
             ComboDisco.ValueMember = "Id";
             ComboDisco.SelectedIndex = -1;
+
+            ComboDisco.BindingContext = new BindingContext();
         }
 
         private async Task GetComboCliente()
@@ -77,6 +85,8 @@ namespace Desktop.Views
             ComboCliente.DisplayMember = "Nombre";
             ComboCliente.ValueMember = "Id";
             ComboCliente.SelectedIndex = -1;
+
+            ComboCliente.BindingContext = new BindingContext();
         }
 
         private void BtnSalir_Click(object sender, EventArgs e)
@@ -137,8 +147,12 @@ namespace Desktop.Views
                 Cantidad = (int)NumericCantidad.Value,
                 ClienteId= (int)(ComboCliente.SelectedValue ?? 0),
                 DiscoId= (int)(ComboDisco.SelectedValue ?? 0)
-
             };
+
+            ventaAGuardar.Cliente = null;
+            ventaAGuardar.Usuario = null;
+            ventaAGuardar.Disco = null;
+
             bool response = false;
             if (_currentVenta != null)
             {
@@ -236,43 +250,6 @@ namespace Desktop.Views
         private async void CheckVerEliminados_CheckedChanged(object sender, EventArgs e)
         {
             await GetAllData();
-        }
-
-        private void GridVentas_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            // 1) Ocultar TODAS las columnas que vienen del DataSource
-            foreach (DataGridViewColumn col in GridVentas.Columns)
-            {
-                col.Visible = false;
-            }
-
-            // 2) Agregar tus columnas personalizadas
-            GridVentas.Columns.Add("Fecha", "Fecha");
-            GridVentas.Columns.Add("Cliente", "Cliente");
-            GridVentas.Columns.Add("Disco", "Disco");
-            GridVentas.Columns.Add("Usuario", "Usuario");
-            GridVentas.Columns.Add("Cantidad", "Cant.");
-            GridVentas.Columns.Add("Precio", "Precio");
-
-            // 3) Cargar los valores en cada celda
-            foreach (DataGridViewRow row in GridVentas.Rows)
-            {
-                if (row.DataBoundItem is Venta venta)
-                {
-                    row.Cells["Fecha"].Value = venta.Fecha;
-                    row.Cells["Cliente"].Value = venta.Cliente?.Nombre;
-                    row.Cells["Disco"].Value = venta.Disco?.Titulo;
-                    row.Cells["Usuario"].Value = venta.Usuario?.NombreUsuario;
-                    row.Cells["Cantidad"].Value = venta.Cantidad;
-                    row.Cells["Precio"].Value = venta.Precio;
-                }
-            }
-
-
-            if (GridVentas.Columns.Contains("Fecha"))
-            {
-                GridVentas.Columns["Fecha"].DefaultCellStyle.Format = "dd/MM/yyyy";
-            }
         }
     }
 }

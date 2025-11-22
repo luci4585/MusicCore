@@ -55,7 +55,6 @@ namespace Desktop.Views
                 }
                 GridDiscos.DataSource = _discos;
                 GridDiscos.HideColumns("Id", "ArtistaId", "GeneroId", "IsDeleted");
-
             }
             catch (Exception ex)
             {
@@ -67,7 +66,7 @@ namespace Desktop.Views
         {
             _generos= await _generoService.GetAllAsync();
             ComboBoxGenero.DataSource = _generos;
-            ComboBoxGenero.DisplayMember = "Nombre";
+            ComboBoxGenero.DisplayMember = "Titulo";
             ComboBoxGenero.ValueMember = "Id";
             ComboBoxGenero.SelectedIndex = -1;
         }
@@ -76,7 +75,7 @@ namespace Desktop.Views
         {
             _artistas = await _artistaService.GetAllAsync();
             ComboBoxArtista.DataSource = _artistas;
-            ComboBoxArtista.DisplayMember = "Nombre";
+            ComboBoxArtista.DisplayMember = "Titulo";
             ComboBoxArtista.ValueMember = "Id";
             ComboBoxArtista.SelectedIndex = -1;
         }

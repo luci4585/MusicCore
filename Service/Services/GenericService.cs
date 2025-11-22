@@ -29,11 +29,19 @@ namespace Service.Services
         {
             var response = await _httpClient.GetAsync($"{_endpoint}?filter={filtro}");
             var content = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception($"Error al obtener los datos: {response.StatusCode}");
+
+            try 
+            { 
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"Error al obtener los datos: {response.StatusCode}");
+                }
+                return JsonSerializer.Deserialize<List<T>>(content, _options);
             }
-            return JsonSerializer.Deserialize<List<T>>(content, _options);
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al deserializar los datos: {ex.Message}");
+            }
         }
 
 

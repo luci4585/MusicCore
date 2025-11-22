@@ -25,7 +25,11 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Venta>>> GetVentas()
         {
-            return await _context.Ventas.ToListAsync();
+            return await _context.Ventas
+                        .Include(v => v.Cliente)
+                        .Include(v => v.Usuario)
+                        .Include(v => v.Disco)
+                        .ToListAsync();
         }
 
         // GET: api/Ventas/deleteds
@@ -113,7 +117,13 @@ namespace Backend.Controllers
         [HttpPut("restore/{id}")]
         public async Task<IActionResult> RestoreArtista(int id)
         {
-            var venta = await _context.Ventas.IgnoreQueryFilters().FirstOrDefaultAsync(c => c.Id.Equals(id));
+            var venta = await _context.Ventas
+                .IgnoreQueryFilters()
+                .Include(c => c.Cliente)
+                .Include(c => c.Usuario)
+                .Include(c => c.Disco)
+                .FirstOrDefaultAsync(c => c.Id.Equals(id));
+
             if (venta == null)
             {
                 return NotFound();
