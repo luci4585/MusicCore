@@ -30,6 +30,7 @@ namespace Desktop.Views
             InitializeComponent();
             _ = GetAllData();
             CheckVerEliminados.CheckedChanged += DisplayHideControlsRestoreButton;
+            GridVentas.DataBindingComplete += GridVentas_DataBindingComplete;
         }
 
         private void DisplayHideControlsRestoreButton(object? sender, EventArgs e)
@@ -44,8 +45,8 @@ namespace Desktop.Views
 
         private async Task GetAllData()
         {
-            GetComboCliente();
-            GetComboDisco();
+            await GetComboCliente();
+            await GetComboDisco();
 
             if (CheckVerEliminados.Checked)
             {
@@ -55,16 +56,9 @@ namespace Desktop.Views
             {
                 _ventas = await _ventaService.GetAllAsync();
             }
-            var ventasParaMostrar = _ventas.Select(v => new
-            {
-                Fecha = v.Fecha.ToShortDateString(),
-                Precio = Math.Round(v.Precio, 2),
-                Cliente = _clientes.FirstOrDefault(c => c.Id == v.ClienteId)?.Nombre,
-                Disco = _discos.FirstOrDefault(d => d.Id == v.DiscoId)?.Titulo,
-                Cantidad = v.Cantidad
-            }).ToList();
+            GridVentas.DataSource = _ventas;
 
-            GridVentas.DataSource = ventasParaMostrar;
+            GridVentas.Columns["Fecha"].DefaultCellStyle.Format = "dd/MM/yyyy";
         }
 
         private async Task GetComboDisco()
@@ -242,6 +236,43 @@ namespace Desktop.Views
         private async void CheckVerEliminados_CheckedChanged(object sender, EventArgs e)
         {
             await GetAllData();
+        }
+
+        private void GridVentas_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            // 1) Ocultar TODAS las columnas que vienen del DataSource
+            foreach (DataGridViewColumn col in GridVentas.Columns)
+            {
+                col.Visible = false;
+            }
+
+            // 2) Agregar tus columnas personalizadas
+            GridVentas.Columns.Add("Fecha", "Fecha");
+            GridVentas.Columns.Add("Cliente", "Cliente");
+            GridVentas.Columns.Add("Disco", "Disco");
+            GridVentas.Columns.Add("Usuario", "Usuario");
+            GridVentas.Columns.Add("Cantidad", "Cant.");
+            GridVentas.Columns.Add("Precio", "Precio");
+
+            // 3) Cargar los valores en cada celda
+            foreach (DataGridViewRow row in GridVentas.Rows)
+            {
+                if (row.DataBoundItem is Venta venta)
+                {
+                    row.Cells["Fecha"].Value = venta.Fecha;
+                    row.Cells["Cliente"].Value = venta.Cliente?.Nombre;
+                    row.Cells["Disco"].Value = venta.Disco?.Titulo;
+                    row.Cells["Usuario"].Value = venta.Usuario?.NombreUsuario;
+                    row.Cells["Cantidad"].Value = venta.Cantidad;
+                    row.Cells["Precio"].Value = venta.Precio;
+                }
+            }
+
+
+            if (GridVentas.Columns.Contains("Fecha"))
+            {
+                GridVentas.Columns["Fecha"].DefaultCellStyle.Format = "dd/MM/yyyy";
+            }
         }
     }
 }

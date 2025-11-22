@@ -1,4 +1,5 @@
-﻿using Desktop.ViewReports;
+﻿using Desktop.ExtensionMethod;
+using Desktop.ViewReports;
 using Service.Models;
 using Service.Services;
 using System;
@@ -53,10 +54,10 @@ namespace Desktop.Views
                     _discos = await _discoService.GetAllAsync();
                 }
                 GridDiscos.DataSource = _discos;
-                GridDiscos.Columns["Id"].Visible = false;
-                GridDiscos.Columns["IsDeleted"].Visible = false;
+                GridDiscos.HideColumns("Id", "ArtistaId", "GeneroId", "IsDeleted");
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"Error al obtener los datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -82,28 +83,35 @@ namespace Desktop.Views
 
         private async void BtnEliminar_Click_1(object sender, EventArgs e)
         {
-            //chequeamos que haya películas seleccionadas
-            if (GridDiscos.Rows.Count > 0 && GridDiscos.SelectedRows.Count > 0)
+            try
             {
-                Disco entitySelected = (Disco)GridDiscos.SelectedRows[0].DataBoundItem;
-                var respuesta = MessageBox.Show($"¿Está seguro de eliminar el disco {entitySelected.Titulo} seleccionado?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (respuesta == DialogResult.Yes)
+                //chequeamos que haya películas seleccionadas
+                if (GridDiscos.Rows.Count > 0 && GridDiscos.SelectedRows.Count > 0)
                 {
-                    if (await _discoService.DeleteAsync(entitySelected.Id))
+                    Disco entitySelected = (Disco)GridDiscos.SelectedRows[0].DataBoundItem;
+                    var respuesta = MessageBox.Show($"¿Está seguro de eliminar el disco {entitySelected.Titulo} seleccionado?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (respuesta == DialogResult.Yes)
                     {
-                        LabelStatusMessage.Text = $"Disco {entitySelected.Titulo} eliminado correctamente";
-                        TimerStatusBar.Start();
-                        await GetAllData();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Error al eliminar el disco", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        if (await _discoService.DeleteAsync(entitySelected.Id))
+                        {
+                            LabelStatusMessage.Text = $"Disco {entitySelected.Titulo} eliminado correctamente";
+                            TimerStatusBar.Start();
+                            await GetAllData();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error al eliminar el disco", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un disco para eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Debe seleccionar un disco para eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al obtener los datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -135,44 +143,67 @@ namespace Desktop.Views
 
             };
             bool response = false;
-            if (_currentDisco != null)
+
+            try
             {
-                response = await _discoService.UpdateAsync(discoAGuardar);
+                if (_currentDisco != null)
+                {
+                    response = await _discoService.UpdateAsync(discoAGuardar);
+                }
+                else
+                {
+                    var nuevodisco = await _discoService.AddAsync(discoAGuardar);
+                    response = nuevodisco != null;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var nuevodisco = await _discoService.AddAsync(discoAGuardar);
-                response = nuevodisco != null;
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-            if (response)
-            {
-                _currentDisco = null; // Reset the modified movie after saving
-                LabelStatusMessage.Text = $"Disco {discoAGuardar.Titulo} guardado correctamente";
-                TimerStatusBar.Start(); // Iniciar el temporizador para mostrar el mensaje en la barra de estado
-                await GetAllData();
-                LimpiarControlesAgregarEditar();
-                TabControl.SelectedTab = TabPageLista;
+            try 
+            { 
+                if (response)
+                {
+                    _currentDisco = null; // Reset the modified movie after saving
+                    LabelStatusMessage.Text = $"Disco {discoAGuardar.Titulo} guardado correctamente";
+                    TimerStatusBar.Start(); // Iniciar el temporizador para mostrar el mensaje en la barra de estado
+                    await GetAllData();
+                    LimpiarControlesAgregarEditar();
+                    TabControl.SelectedTab = TabPageLista;
+                }
+                else
+                {
+                    MessageBox.Show("Error al agregar el disco", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Error al agregar el disco", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al obtener los datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
         }
 
         private void BtnModificar_Click(object sender, EventArgs e)
         {
-            if (GridDiscos.RowCount > 0 && GridDiscos.SelectedRows.Count > 0)
+            try
             {
-                _currentDisco = (Disco)GridDiscos.SelectedRows[0].DataBoundItem;
-                TxtTitulo.Text = _currentDisco.Titulo;
-                ComboBoxArtista.SelectedValue = _currentDisco.ArtistaId;
-                ComboBoxGenero.SelectedValue = _currentDisco.GeneroId;
-                TabControl.SelectedTab = TabPageAgregarEditar;
-
+                if (GridDiscos.RowCount > 0 && GridDiscos.SelectedRows.Count > 0)
+                {
+                    _currentDisco = (Disco)GridDiscos.SelectedRows[0].DataBoundItem;
+                    TxtTitulo.Text = _currentDisco.Titulo;
+                    ComboBoxArtista.SelectedValue = _currentDisco.ArtistaId;
+                    ComboBoxGenero.SelectedValue = _currentDisco.GeneroId;
+                    TabControl.SelectedTab = TabPageAgregarEditar;            }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un disco para modificarla", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Debe seleccionar un disco para modificarla", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al obtener los datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
         }
 
@@ -209,27 +240,35 @@ namespace Desktop.Views
         {
             if (!CheckVerEliminados.Checked) return;
 
-            if (GridDiscos.Rows.Count > 0 && GridDiscos.SelectedRows.Count > 0)
+            try 
             {
-                Disco entitySelected = (Disco)GridDiscos.SelectedRows[0].DataBoundItem;
-                var respuesta = MessageBox.Show($"¿Está seguro de recuperar el disco {entitySelected.Titulo} seleccionado?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (respuesta == DialogResult.Yes)
+                if (GridDiscos.Rows.Count > 0 && GridDiscos.SelectedRows.Count > 0)
                 {
-                    if (await _discoService.RestoreAsync(entitySelected.Id))
+                    Disco entitySelected = (Disco)GridDiscos.SelectedRows[0].DataBoundItem;
+                    var respuesta = MessageBox.Show($"¿Está seguro de recuperar el disco {entitySelected.Titulo} seleccionado?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (respuesta == DialogResult.Yes)
                     {
-                        LabelStatusMessage.Text = $"Disco {entitySelected.Titulo} restaurado correctamente";
-                        TimerStatusBar.Start();
-                        await GetAllData();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Error al restaurar el disco", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        if (await _discoService.RestoreAsync(entitySelected.Id))
+                        {
+                            LabelStatusMessage.Text = $"Disco {entitySelected.Titulo} restaurado correctamente";
+                            TimerStatusBar.Start();
+                            await GetAllData();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error al restaurar el disco", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
+                else
+                {
+                    MessageBox.Show("Debe seleccionar un disco para restaurar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Debe seleccionar un disco para restaurar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al obtener los datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
         }
 
