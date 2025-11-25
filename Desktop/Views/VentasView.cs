@@ -143,19 +143,21 @@ namespace Desktop.Views
         {
             Venta ventaAGuardar = new Venta
             {
-                Id = _currentVenta?.Id ?? 0,
+                Id = _currentVenta.Id,
+                //Id = _currentVenta?.Id ?? 0,
                 Cantidad = (int)NumericCantidad.Value,
                 ClienteId= (int)(ComboCliente.SelectedValue ?? 0),
                 DiscoId= (int)(ComboDisco.SelectedValue ?? 0)
             };
 
-            ventaAGuardar.Cliente = null;
-            ventaAGuardar.Usuario = null;
-            ventaAGuardar.Disco = null;
+            ventaAGuardar.Cliente = _currentVenta.Cliente;
+            ventaAGuardar.Usuario = _currentVenta.Usuario;
+            ventaAGuardar.Disco = _currentVenta.Disco;
 
             bool response = false;
             if (_currentVenta != null)
             {
+                ventaAGuardar.Id = _currentVenta.Id; // asegurar id válido
                 response = await _ventaService.UpdateAsync(ventaAGuardar);
             }
             else

@@ -1,0 +1,101 @@
+﻿@page "/ventas"
+@using System.Diagnostics
+@inject SweetAlertService _sweetAlertService
+@inject IGenericService<Venta> _ventaService
+@inject ILogger<Venta> _logger
+
+
+<PageTitle>Ventas</PageTitle>
+
+<PageHeader Title="Ventas" Description="Administra aquí las ventas" />
+
+@if (ventas == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else if (!ventas.Any())
+{
+    <p><em>No hay ventas disponibles.</em></p>
+}
+else
+{
+    <NavLink class="btn btn-info" href=@($"NuevoEditarVenta?IdVenta")>
+       Nueva Venta
+    </NavLink>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Total</th>
+                <th>Usuario</th>
+                <th colspan="2">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var venta in ventas)
+            {
+                <tr>
+                    <td>@venta.Fecha</td>
+                    <td>@venta.Cliente.Nombre</td>
+                    <td>@($"$ {venta.Precio:N2}")</td>
+                    <td>@venta.Cantidad</td>
+                    <td>@($"$ {(venta.Precio * venta.Cantidad):N2}")</td>
+                    <td>@venta.Usuario.NombreUsuario</td>
+                    <td>
+                        <button class="btn btn-danger" @onclick="() => DeleteVenta(venta)">Eliminar</button>
+                    </td>
+                    <NavLink class="btn btn-info" href=@($"NuevoEditarVenta?IdVenta={venta.Id}")>
+                        Editar
+                    </NavLink>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private List<Venta>? ventas;
+    private List<Cliente>? clientes;
+    private List<DiscoVenta>? discoVenta;
+    private List<Usuario>? usuarios;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //cronometramos el tiempo de carga
+        var stopwatch = Stopwatch.StartNew();
+        //ejecutamos las tareas de manera concurrente asignando a las listas los datos obtenidos
+        ventas = await _ventaService.GetAllAsync(null);
+
+        stopwatch.Stop();
+        _logger.LogInformation($"Tiempo de carga: {stopwatch.ElapsedMilliseconds} ms");
+        
+    }
+    private async Task DeleteVenta(Venta venta)
+    {
+        var respuesta = await _sweetAlertService.FireAsync(new SweetAlertOptions
+        {
+            Title = "¿Estás seguro?",
+            Text = $"¿Deseas eliminar la venta del cliente '{venta.Cliente?.Nombre}' del día {venta.Fecha:d}?",
+            Icon = SweetAlertIcon.Warning,
+            ShowCancelButton = true,
+            ConfirmButtonText = "Sí, eliminar",
+            CancelButtonText = "Cancelar"
+        });
+        if (respuesta.IsConfirmed)
+        {
+            if (await _ventaService.DeleteAsync(venta.Id))
+            {
+                ventas?.Remove(venta);
+                StateHasChanged();
+            }
+            else
+            {
+                await _sweetAlertService.FireAsync("Error", "No se pudo eliminar la venta.", SweetAlertIcon.Error);
+            }
+        }
+    }
+}

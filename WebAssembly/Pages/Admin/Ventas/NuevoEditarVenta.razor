@@ -1,0 +1,141 @@
+﻿@page "/NuevoEditarVenta"
+@inject IGenericService<Venta> _ventaService
+@inject IGenericService<Cliente> _clienteService
+@inject IGenericService<Usuario> _usuarioService
+@inject IGenericService<Disco> _discoService
+@inject NavigationManager NavigationManager
+
+@if (venta == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else
+{
+    <h3>@tituloPagina</h3>
+    <div style="background-color: @(isEditing ? "lightyellow" : "white")">
+        <EditForm Model="venta" OnValidSubmit="Guardar">
+            <DataAnnotationsValidator />
+            <div class="container">
+                <div class="col-md-5">
+
+                    <!-- Cliente -->
+                    <div class="form-group">
+                        <label class="form-label">Cliente:</label>
+                        <InputSelect class="form-control mb-2" @bind-Value="venta.ClienteId">
+                            @foreach (var c in clientes)
+                            {
+                                <option value="@c.Id">@c.Nombre</option>
+                            }
+                        </InputSelect>
+                    </div>
+
+                    <!-- Usuario -->
+                    <div class="form-group">
+                        <label class="form-label">Usuario:</label>
+                        <InputSelect class="form-control mb-2" @bind-Value="venta.UsuarioId">
+                            @foreach (var u in usuarios)
+                            {
+                                <option value="@u.Id">@u.NombreUsuario</option>
+                            }
+                        </InputSelect>
+                    </div>
+
+                    <!-- Disco -->
+                    <div class="form-group">
+                        <label>Disco:</label>
+                        <InputSelect class="form-control mb-2" @bind-Value="venta.DiscoId">
+                            @foreach (var d in discos)
+                            {
+                                <option value="@d.Id">@d.Titulo</option>
+                            }
+                        </InputSelect>
+                    </div>
+
+                    <!-- Precio -->
+                    <div class="form-group">
+                        <label class="form-label">Precio unitario:</label>
+                        <InputNumber class="form-control mb-2" @bind-Value="venta.Precio" />
+                    </div>
+
+                    <!-- Cantidad -->
+                    <div class="form-group">
+                        <label class="form-label">Cantidad:</label>
+                        <InputNumber class="form-control mb-2" @bind-Value="venta.Cantidad" />
+                    </div>
+
+                    <!-- Total -->
+                    <div class="form-group">
+                        <label class="form-label">Total:</label>
+                        <input class="form-control mb-2"
+                               value="@($"$ {(venta.Precio * venta.Cantidad):F2}")"
+                               disabled />
+                    </div>
+
+                    <!-- Fecha -->
+                    <div class="form-group">
+                        <label class="form-label">Fecha:</label>
+                        <InputDate class="form-control mb-2" @bind-Value="venta.Fecha" />
+                    </div>
+                </div>
+
+                <ValidationSummary />
+                <button class="btn btn-primary" type="submit">@guardarButtonText</button>
+                <button class="btn btn-danger" @onclick="Cancelar">Cancelar</button>
+            </div>
+        </EditForm>
+    </div>
+}
+
+@code {
+    [SupplyParameterFromQuery]
+    [Parameter]
+    public int? idVenta { get; set; }
+
+    private Venta venta;
+
+    private bool isEditing => idVenta != null;
+    private string guardarButtonText => isEditing ? "Actualizar" : "Agregar";
+    private string tituloPagina => isEditing ? "Editando Venta" : "Agregando nueva Venta";
+
+    private List<Cliente> clientes = new();
+    private List<Usuario> usuarios = new();
+    private List<Disco> discos = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        clientes = await _clienteService.GetAllAsync(null);
+        usuarios = await _usuarioService.GetAllAsync(null);
+        discos = await _discoService.GetAllAsync(null);
+
+        if (idVenta != null)
+        {
+            venta = await _ventaService.GetByIdAsync((int)idVenta);
+        }
+        else
+        {
+            venta = new Venta
+            {
+                Fecha = DateTime.Now,
+                ClienteId = clientes.FirstOrDefault()?.Id ?? 0,
+                UsuarioId = usuarios.FirstOrDefault()?.Id ?? 0,
+                DiscoId = discos.FirstOrDefault()?.Id ?? 0,
+                Cantidad = 1
+            };
+        }
+    }
+
+    private async Task Guardar()
+    {
+        if (isEditing)
+            await _ventaService.UpdateAsync(venta);
+        else
+            await _ventaService.AddAsync(venta);
+
+        NavigationManager.NavigateTo("ventas");
+    }
+
+    private void Cancelar()
+    {
+        NavigationManager.NavigateTo("ventas");
+    }
+}

@@ -69,16 +69,35 @@ namespace Service.Services
 
         public async Task<bool> UpdateAsync(T? entity)
         {
-            var idValue = entity.GetType().GetProperty("Id").GetValue(entity);
-            var response = await _httpClient.PutAsJsonAsync($"{ _endpoint}/{idValue}", entity);
+            var idProp = entity.GetType().GetProperty("Id");
+            if (idProp == null)
+                throw new Exception("La entidad no tiene propiedad 'Id'");
+
+            var idValue = idProp.GetValue(entity);
+
+            if (idValue == null || idValue.ToString() == "0")
+                throw new Exception("El Id de la entidad es inválido para actualizar");
+
+            var response = await _httpClient.PutAsJsonAsync($"{_endpoint}/{idValue}", entity);
+
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("Hubo un problema al actualizar"); 
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Error al actualizar. Status: {response.StatusCode}. Backend: {errorContent}");
             }
-            else
-            {
-                return response.IsSuccessStatusCode;
-            }
+
+            return true;
+
+            //var idValue = entity.GetType().GetProperty("Id").GetValue(entity);
+            //var response = await _httpClient.PutAsJsonAsync($"{ _endpoint}/{idValue}", entity);
+            //if (!response.IsSuccessStatusCode)
+            //{
+            //    throw new Exception("Hubo un problema al actualizar"); 
+            //}
+            //else
+            //{
+            //    return response.IsSuccessStatusCode;
+            //}
         }
 
         public async Task<bool> DeleteAsync(int id)

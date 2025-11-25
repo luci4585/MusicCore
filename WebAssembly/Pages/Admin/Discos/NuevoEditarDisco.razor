@@ -61,19 +61,22 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        // cargar artistas y géneros primero
+        artistas = await _artistaService.GetAllAsync(null);
+        generos = await _generoService.GetAllAsync(null);
+
         if (idDisco != null)
         {
             disco = await _discoService.GetByIdAsync((int)idDisco);
         }
         else
         {
-            disco = new Disco();
+            disco = new Disco
+            {
+                ArtistaId = artistas.FirstOrDefault()?.Id ?? 0,
+                GeneroId = generos.FirstOrDefault()?.Id ?? 0
+            };
         }
-
-
-        // cargar artistas y géneros desde los servicios
-        artistas = await _artistaService.GetAllAsync(null);
-        generos = await _generoService.GetAllAsync(null);
     }
 
     private async Task Guardar()
