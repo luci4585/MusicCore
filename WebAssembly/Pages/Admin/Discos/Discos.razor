@@ -2,8 +2,9 @@
 @using System.Diagnostics
 @inject SweetAlertService _sweetAlertService
 @inject IGenericService<Disco> _discoService
+@inject FirebaseAuthService _authService
 @inject ILogger<Discos> _logger
-
+@inject NavigationManager _navigationManager
 
 <PageTitle>Discos</PageTitle>
 
@@ -58,14 +59,12 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        //cronometramos el tiempo de carga
-        var stopwatch = Stopwatch.StartNew();
-        //ejecutamos las tareas de manera concurrente asignando a las listas los datos obtenidos
-        discos = await _discoService.GetAllAsync(null);
-
-        stopwatch.Stop();
-        _logger.LogInformation($"Tiempo de carga: {stopwatch.ElapsedMilliseconds} ms");
-        
+        if (!await _authService.IsUserAuthenticated())
+        {
+            _navigationManager.NavigateTo("/");
+            return;
+        }
+        discos = (await _discoService.GetAllAsync(null))?.ToList();
     }
     private async Task DeleteDisco(Disco disco)
     {

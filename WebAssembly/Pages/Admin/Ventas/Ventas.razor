@@ -2,8 +2,9 @@
 @using System.Diagnostics
 @inject SweetAlertService _sweetAlertService
 @inject IGenericService<Venta> _ventaService
+@inject FirebaseAuthService _authService
 @inject ILogger<Venta> _logger
-
+@inject NavigationManager _navigationManager
 
 <PageTitle>Ventas</PageTitle>
 
@@ -65,14 +66,12 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        //cronometramos el tiempo de carga
-        var stopwatch = Stopwatch.StartNew();
-        //ejecutamos las tareas de manera concurrente asignando a las listas los datos obtenidos
-        ventas = await _ventaService.GetAllAsync(null);
-
-        stopwatch.Stop();
-        _logger.LogInformation($"Tiempo de carga: {stopwatch.ElapsedMilliseconds} ms");
-        
+        if (!await _authService.IsUserAuthenticated())
+        {
+            _navigationManager.NavigateTo("/");
+            return;
+        }
+        ventas = (await _ventaService.GetAllAsync(null))?.ToList();
     }
     private async Task DeleteVenta(Venta venta)
     {
