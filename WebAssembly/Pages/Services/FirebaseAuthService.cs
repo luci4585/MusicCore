@@ -16,10 +16,11 @@ namespace WebBlazor.Pages.Login.Services
         public async Task<FirebaseUser?> SignInWithEmailPassword(string email, string password, bool rememberPassword)
         {
             var user = await _jsRuntime.InvokeAsync<FirebaseUser?>("firebaseAuth.signInWithEmailPassword", email, password, rememberPassword);
-            if (user != null && user.EmailVerified)
+            if (user != null)
             {
                 CurrentUser = user;
-                OnChangeLogin?.Invoke();
+                if (user.EmailVerified)
+                    OnChangeLogin?.Invoke();
             }
             return user;
         }
@@ -51,7 +52,7 @@ namespace WebBlazor.Pages.Login.Services
         public async Task<bool> IsUserAuthenticated()
         {
             var user = await GetUserFirebase();
-            return user!=null;
+            return user!=null&&user.EmailVerified;
         }
 
         public async Task<FirebaseUser?> LoginWithGoogle()
