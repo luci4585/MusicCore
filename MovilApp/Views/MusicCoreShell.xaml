@@ -46,19 +46,14 @@
         Route="MainPage" />
 
 
-        <Tab Title="Admin Capacitaciones"
-     Route="capacitaciones"
+        <Tab Title="Admin Discos"
+     Route="discos"
      Icon="paw.png">
             <ShellContent
             Title="Lista"
             Icon="cat.png"
             ContentTemplate="{DataTemplate admin:AdminDiscosView}"
-            Route="AdminCapacitaciones" />
-            <ShellContent
-            Title="Agregar carrera"
-            Icon="dog.png"
-            ContentTemplate="{DataTemplate admin:AddEditDiscoView}"
-            Route="AdminCapacitacion" />
+            Route="AdminDiscso" />
         </Tab>
     </FlyoutItem>
 
