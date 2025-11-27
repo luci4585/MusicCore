@@ -122,9 +122,9 @@
                                     HorizontalOptions="Center"
                                     Margin="0,0,15,0"/>
 
-                                    <!-- Título del libro -->
+                                    <!-- Título del disco -->
                                     <Label Grid.Column="1" Grid.Row="0"
-                                    Text="{Binding Nombre}" 
+                                    Text="{Binding Titulo}" 
                                     FontSize="18"
                                     FontAttributes="Bold"
                                     TextColor="DarkSlateGray"
