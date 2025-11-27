@@ -66,7 +66,7 @@ namespace MovilApp.ViewModels.Discos
 
         private void OnLimpiar()
         {
-            textoBusqueda = string.Empty;
+            TextoBusqueda = string.Empty;
             // Mantener los filtros pero ejecutar búsqueda limpia
             OnBuscar();
         }
