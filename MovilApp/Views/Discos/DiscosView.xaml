@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:MovilApp.ViewModels.Discos"
              x:Class="MovilApp.Views.DiscosView"
-             Title="DiscosView">
+             Title="Discos">
 
     <ContentPage.BindingContext>
         <vm:DiscosViewModel />
@@ -89,7 +89,7 @@
                 HasShadow="True"
                 BorderColor="Green">
                     <StackLayout>
-                        <Label Text="📚 Resultados de búsqueda" 
+                        <Label Text="💿 Resultados de búsqueda" 
                         FontSize="18" 
                         FontAttributes="Bold"
                         TextColor="DarkGreen"
@@ -116,7 +116,7 @@
 
                                     <!-- Ícono principal -->
                                     <Label Grid.Column="0" Grid.Row="0" Grid.RowSpan="4"
-                                    Text="📚" 
+                                    Text="💿" 
                                     FontSize="40"
                                     VerticalOptions="Center"
                                     HorizontalOptions="Center"
@@ -135,7 +135,7 @@
                                          Orientation="Horizontal" 
                                          Spacing="5"
                                          Margin="0,5,0,0">
-                                        <Label Text="🏢" FontSize="14"/>
+                                        <Label Text="🎤" FontSize="14"/>
                                         <Label Text="{Binding Artista, StringFormat='Orador/a: {0}'}" 
                                         FontSize="14"
                                         TextColor="Gray"
@@ -147,7 +147,7 @@
                                          Orientation="Horizontal" 
                                          Spacing="5"
                                          Margin="0,2,0,0">
-                                        <Label Text="📅" FontSize="14"/>
+                                        <Label Text="🎸" FontSize="14"/>
                                         <Label Text="{Binding Genero}" 
                                         FontSize="14"
                                         TextColor="Gray"/>
