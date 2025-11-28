@@ -34,9 +34,9 @@ namespace Backend.Controllers
                 filter = filter.ToLower();
 
                 query = query.Where(d =>
-                    d.Titulo.ToLower().Contains(filter) ||
-                    d.Artista.Nombre.ToLower().Contains(filter) ||
-                    d.Genero.Nombre.ToLower().Contains(filter)
+                    d.Titulo.ToLower().Contains(filter) ||                
+                    d.Artista.Nombre.ToLower().Contains(filter) ||       
+                    d.Genero.Nombre.ToLower().Contains(filter)            
                 );
             }
 
@@ -44,15 +44,6 @@ namespace Backend.Controllers
         }
 
 
-        // GET: api/Discos
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Disco>>> GetDiscos()
-        //{
-        //    return await _context.Discos
-        //        .Include(d => d.Artista)
-        //        .Include(d => d.Genero)
-        //        .ToListAsync();
-        //}
 
         // GET: api/Discos/deleteds
         [HttpGet("deleteds/")]
