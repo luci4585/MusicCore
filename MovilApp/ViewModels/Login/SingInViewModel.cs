@@ -97,6 +97,7 @@ namespace MovilApp.ViewModels.Login
                         TipoUsuario = TipoUsuarioEnum.Administrador,
                         IsDeleted = false
                     };
+                    var usuarioCreado = await _usuarioService.AddAsync(nuevoUsuario);
                     await SendVerificationEmailAsync(user.User.GetIdTokenAsync().Result);
                     await Application.Current.MainPage.DisplayAlert("Registrarse", "Cuenta creada!", "Ok");
                     if (Application.Current?.MainPage is MusicCoreShell shell)

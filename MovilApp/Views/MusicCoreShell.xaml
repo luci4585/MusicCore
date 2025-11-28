@@ -67,10 +67,4 @@
       Command="{Binding LogoutCommand}"
       IconImageSource="random.png"/>
 
-    <ShellContent
-        Title="Iniciar sesión"
-        ContentTemplate="{DataTemplate login:LoginView}"
-        Route="Login" 
-        IsVisible="{Binding UserIsLogout}"/>
-
 </Shell>
