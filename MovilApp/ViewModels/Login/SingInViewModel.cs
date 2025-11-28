@@ -3,8 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
 using Firebase.Auth.Providers;
 using Firebase.Auth.Repository;
-using Service.Enums;
 using MovilApp.Views;
+using Service.Enums;
 using Service.Models;
 using Service.Services;
 using System.Net.Http.Headers;
@@ -27,14 +27,6 @@ namespace MovilApp.ViewModels.Login
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(RegistrarseCommand))]
-        private string lastnombre;
-
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(RegistrarseCommand))]
-        private string dni;
-
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(RegistrarseCommand))]
         private string email;
 
         [ObservableProperty]
@@ -49,7 +41,7 @@ namespace MovilApp.ViewModels.Login
         {
             FirebaseApiKey = Service.Properties.Resources.ApiKeyFirebase;
             RequestUri = "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" + FirebaseApiKey;
-            RegistrarseCommand = new RelayCommand(Registrarse, PermitirRegistrarse);
+            RegistrarseCommand = new AsyncRelayCommand(Registrarse, PermitirRegistrarse);
             VolverCommand = new AsyncRelayCommand(Volver);
             _clientAuth = new FirebaseAuthClient(new FirebaseAuthConfig()
             {
@@ -75,7 +67,7 @@ namespace MovilApp.ViewModels.Login
             }
         }
 
-        private async void Registrarse()
+        private async Task Registrarse()
         {
             if (string.IsNullOrEmpty(nombre) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(verifyPassword))
             {
@@ -86,14 +78,12 @@ namespace MovilApp.ViewModels.Login
             {
                 try
                 {
-                    var fullname = nombre + " " + lastnombre;
-                    var user = await _clientAuth.CreateUserWithEmailAndPasswordAsync(email, password, fullname);
+                    var user = await _clientAuth.CreateUserWithEmailAndPasswordAsync(email, password, nombre);
                     var nuevoUsuario = new Usuario
                     {
                         NombreUsuario = nombre,
-                        //Apellido = lastnombre,
-                        //Dni = dni,
                         Email = email,
+                        Password = password,
                         TipoUsuario = TipoUsuarioEnum.Administrador,
                         IsDeleted = false
                     };
