@@ -101,7 +101,7 @@
                     </StackLayout>
                 </Frame>
 
-                <!-- Lista de libros en cards mejoradas -->
+                <!-- Lista de discos en cards mejoradas -->
                 <CollectionView ItemsSource="{Binding Discos}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>

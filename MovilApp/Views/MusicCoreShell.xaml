@@ -53,7 +53,7 @@
             Title="Lista"
             Icon="cat.png"
             ContentTemplate="{DataTemplate admin:AdminDiscosView}"
-            Route="AdminDiscso" />
+            Route="AdminDiscos" />
         </Tab>
     </FlyoutItem>
 

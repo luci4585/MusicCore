@@ -31,8 +31,8 @@
             IsRefreshing="{Binding IsRefreshing}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextCell Text="{Binding Nombre}"
-                                Detail="{Binding Ponente}"/>
+                        <TextCell Text="{Binding Titulo}"
+                                Detail="{Binding Artista}"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
