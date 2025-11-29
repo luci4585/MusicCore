@@ -12,15 +12,15 @@
         <VerticalStackLayout 
             Spacing="20"
             HorizontalOptions="Center"
-            Padding="20">
+            Padding="30">
 
-            <!-- CONTENEDOR CENTRAL PARA LIMITAR EL ANCHO -->
+            <!-- CONTENEDOR CENTRAL -->
             <Grid 
-                MaximumWidthRequest="450"
+                MaximumWidthRequest="700"
                 HorizontalOptions="Center"
-                Padding="10">
+                Padding="20">
 
-                <VerticalStackLayout Spacing="20">
+                <VerticalStackLayout Spacing="25">
 
                     <Label 
                         FontSize="Title"
@@ -31,8 +31,8 @@
                     <Grid 
                         RowDefinitions="Auto,Auto,Auto,Auto,Auto"
                         ColumnDefinitions="Auto,*"
-                        ColumnSpacing="15"
-                        RowSpacing="20">
+                        ColumnSpacing="20"
+                        RowSpacing="25">
 
                         <!-- Nombre -->
                         <Label Grid.Row="0" Grid.Column="0"
