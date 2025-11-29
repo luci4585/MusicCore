@@ -60,7 +60,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiImage Remove="Resources\Images\LogoMusicCore.jpeg" />
+	  <MauiImage Remove="Resources\Images\LogoMusicCore.jpg" />
 	</ItemGroup>
 
 	<ItemGroup>
