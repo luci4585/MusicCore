@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MovilApp.Views.Login.LoginView"
              xmlns:viewModels="clr-namespace:MovilApp.ViewModels.Login"
-             Title="IniciarSesionView"
+             Title="Iniciar Sesion"
              NavigationPage.HasNavigationBar="False">
     <ContentPage.BindingContext>
         <viewModels:LoginViewModel />

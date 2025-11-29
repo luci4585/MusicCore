@@ -57,7 +57,7 @@
         </Tab>
     </FlyoutItem>
 
-    <FlyoutItem Title="📖 Buscar Discos" Icon="search.png">
+    <FlyoutItem Title="💿 Buscar Discos" Icon="search.png">
         <ShellContent
             Title="Buscar Discos"
             ContentTemplate="{DataTemplate views:DiscosView}"
