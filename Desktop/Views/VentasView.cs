@@ -147,7 +147,8 @@ namespace Desktop.Views
                 //Id = _currentVenta?.Id ?? 0,
                 Cantidad = (int)NumericCantidad.Value,
                 ClienteId= (int)(ComboCliente.SelectedValue ?? 0),
-                DiscoId= (int)(ComboDisco.SelectedValue ?? 0)
+                DiscoId= (int)(ComboDisco.SelectedValue ?? 0),
+                UsuarioId= _currentVenta.UsuarioId
             };
 
             ventaAGuardar.Cliente = _currentVenta.Cliente;
