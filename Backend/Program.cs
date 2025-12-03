@@ -35,7 +35,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins",
         builder => builder
-            .WithOrigins("https://localhost:8000", "https://apimusicoree.azurewebsites.net")
+            .WithOrigins("https://localhost:8000", "https://webmusiccore-b5hxg2d2ftere0a3.brazilsouth-01.azurewebsites.net")
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
