@@ -53,14 +53,30 @@ namespace Desktop.Views
                 {
                     _discos = await _discoService.GetAllAsync();
                 }
+
+                foreach (var disco in _discos)
+                {
+                    disco.Artista = _artistas.FirstOrDefault(a => a.Id == disco.ArtistaId);
+                    disco.Genero = _generos.FirstOrDefault(g => g.Id == disco.GeneroId);
+                }
+
                 GridDiscos.DataSource = _discos;
+
                 GridDiscos.HideColumns("Id", "ArtistaId", "GeneroId", "IsDeleted");
+
+                if (GridDiscos.Columns.Contains("Artista"))
+                    GridDiscos.Columns["Artista"].HeaderText = "Artista";
+
+                if (GridDiscos.Columns.Contains("Genero"))
+                    GridDiscos.Columns["Genero"].HeaderText = "Género";
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al obtener los datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al obtener los datos: {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private async Task GetComboGeneros()
         {
