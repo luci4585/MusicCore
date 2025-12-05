@@ -1,0 +1,39 @@
+﻿.header-card {
+    background: linear-gradient(135deg, #87CEEB 0%, #E6E6FA 100%);
+    border-radius: 8px;
+    padding: 10px 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: 0px auto 20px;
+    max-width: 900px;
+}
+
+.header-title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.header-description {
+    font-size: 1.2rem;
+    color: #34495e;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .header-title {
+        font-size: 2rem;
+    }
+
+    .header-description {
+        font-size: 1rem;
+    }
+
+    .header-card {
+        padding: 10px 10px;
+    }
+}

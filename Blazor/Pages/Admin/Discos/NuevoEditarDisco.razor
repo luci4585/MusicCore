@@ -1,0 +1,96 @@
+﻿@page "/NuevoEditarDisco"
+@inject IGenericService<Disco> _discoService
+@inject IGenericService<Artista> _artistaService
+@inject IGenericService<Genero> _generoService
+@inject NavigationManager NavigationManager
+
+@if (disco == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else
+{
+    <h3>@tituloPagina</h3>
+    <div style="background-color: @(isEditing ? "lightyellow" : "white")">
+        <EditForm Model="disco" OnValidSubmit="Guardar">
+            <DataAnnotationsValidator />
+            <div class="container">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label class="form-label">Nombre:</label>
+                        <InputText class="form-control mb-2" type="text" @bind-Value="disco.Titulo" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Artista:</label>
+                        <InputSelect class="form-control mb-2" @bind-Value="disco.ArtistaId">
+                            @foreach (var artista in artistas)
+                            {
+                                <option value="@artista.Id">@artista.Nombre</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Género:</label>
+                        <InputSelect class="form-control mb-2" @bind-Value="disco.GeneroId">
+                            @foreach (var genero in generos)
+                            {
+                                <option value="@genero.Id">@genero.Nombre</option>
+                            }
+                        </InputSelect>
+                    </div>
+                </div>
+                <ValidationSummary />
+                <button class="btn btn-primary" type="submit">@guardarButtonText</button>
+                <button class="btn btn-danger" @onclick="Cancelar">Cancelar</button>
+            </div>
+        </EditForm>
+    </div>
+}
+@code {
+    [SupplyParameterFromQuery]
+    [Parameter]
+    public int? idDisco { get; set; }
+    private Disco disco;
+
+    private bool isEditing => idDisco != null;
+    private string guardarButtonText => isEditing ? "Actualizar" : "Agregar";
+    private string tituloPagina => isEditing ? "Editando Disco" : "Agregando nuevo Disco";
+    private List<Artista> artistas = new();
+    private List<Genero> generos = new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        // cargar artistas y géneros primero
+        artistas = await _artistaService.GetAllAsync(null);
+        generos = await _generoService.GetAllAsync(null);
+
+        if (idDisco != null)
+        {
+            disco = await _discoService.GetByIdAsync((int)idDisco);
+        }
+        else
+        {
+            disco = new Disco
+            {
+                ArtistaId = artistas.FirstOrDefault()?.Id ?? 0,
+                GeneroId = generos.FirstOrDefault()?.Id ?? 0
+            };
+        }
+    }
+
+    private async Task Guardar()
+    {
+        //logger.LogInformation(campania.PropertiesToString());
+        if (idDisco != null)
+            await _discoService.UpdateAsync(disco);
+        else
+            await _discoService.AddAsync(disco);
+        NavigationManager.NavigateTo($"discos");
+    }
+
+    private async Task Cancelar()
+    {
+        NavigationManager.NavigateTo($"discos");
+    }
+}

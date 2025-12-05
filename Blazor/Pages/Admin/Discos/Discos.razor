@@ -1,0 +1,93 @@
+﻿@page "/discos"
+@using System.Diagnostics
+@inject SweetAlertService _sweetAlertService
+@inject IGenericService<Disco> _discoService
+@inject FirebaseAuthService _authService
+@inject ILogger<Discos> _logger
+@inject NavigationManager _navigationManager
+
+<PageTitle>Discos</PageTitle>
+
+<PageHeader Title="Discos" Description="Administra aquí los discos" />
+
+@if (discos == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else if (!discos.Any())
+{
+    <p><em>No hay discos disponibles.</em></p>
+}
+else
+{
+    <NavLink class="btn btn-info" href=@($"NuevoEditarDisco?IdDisco")>
+       Nuevo Disco
+    </NavLink>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Artista</th>
+                <th>Genero</th>
+                <th colspan="2">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var disco in discos)
+            {
+                <tr>
+                    <td>@disco.Titulo</td>
+                    <td>@disco.Artista</td>
+                    <td>@disco.Genero</td>
+                    <td>
+                        <button class="btn btn-danger" @onclick="() => DeleteDisco(disco)">Eliminar</button>
+                    </td>
+                    <NavLink class="btn btn-info" href=@($"NuevoEditarDisco?IdDisco={disco.Id}")>
+                        Editar
+                    </NavLink>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private List<Disco>? discos;
+    private List<Artista>? artistas;
+    private List<Genero>? generos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!await _authService.IsUserAuthenticated())
+        {
+            _navigationManager.NavigateTo("/");
+            return;
+        }
+        discos = (await _discoService.GetAllAsync(null))?.ToList();
+    }
+    private async Task DeleteDisco(Disco disco)
+    {
+        var respuesta = await _sweetAlertService.FireAsync(new SweetAlertOptions
+        {
+            Title = "¿Estás seguro?",
+            Text = $"¿Deseas eliminar el disco '{disco.Titulo}'?",
+            Icon = SweetAlertIcon.Warning,
+            ShowCancelButton = true,
+            ConfirmButtonText = "Sí, eliminar",
+            CancelButtonText = "Cancelar"
+        });
+        if (respuesta.IsConfirmed)
+        {
+            if (await _discoService.DeleteAsync(disco.Id))
+            {
+                discos?.Remove(disco);
+                StateHasChanged();
+            }
+            else
+            {
+                await _sweetAlertService.FireAsync("Error", "No se pudo eliminar el disco.", SweetAlertIcon.Error);
+            }
+        }
+    }
+}
