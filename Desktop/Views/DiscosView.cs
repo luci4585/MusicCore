@@ -38,43 +38,25 @@ namespace Desktop.Views
 
         }
 
-        private async Task GetAllData()
-        {
-            try
-            {
-                await GetComboArtistas();
-                await GetComboGeneros();
-
-                if (CheckVerEliminados.Checked)
-                {
-                    _discos = await _discoService.GetAllDeletedsAsync();
-                }
-                else
-                {
-                    _discos = await _discoService.GetAllAsync();
-                }
-
-                foreach (var disco in _discos)
-                {
-                    disco.Artista = _artistas.FirstOrDefault(a => a.Id == disco.ArtistaId);
-                    disco.Genero = _generos.FirstOrDefault(g => g.Id == disco.GeneroId);
-                }
-
-                GridDiscos.DataSource = _discos;
-
-                GridDiscos.HideColumns("Id", "ArtistaId", "GeneroId", "IsDeleted");
-
-                if (GridDiscos.Columns.Contains("Artista"))
-                    GridDiscos.Columns["Artista"].HeaderText = "Artista";
-
-                if (GridDiscos.Columns.Contains("Genero"))
-                    GridDiscos.Columns["Genero"].HeaderText = "Género";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al obtener los datos: {ex.Message}",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+        private async Task GetAllData() { 
+            try 
+            { 
+                    await GetComboArtistas(); 
+                    await GetComboGeneros(); 
+                if (CheckVerEliminados.Checked) 
+                { 
+                    _discos = await _discoService.GetAllDeletedsAsync(); 
+                } 
+                else 
+                { 
+                    _discos = await _discoService.GetAllAsync(); 
+                } 
+                GridDiscos.DataSource = _discos; GridDiscos.HideColumns("Id", "ArtistaId", "GeneroId", "IsDeleted"); 
+            } 
+            catch (Exception ex) 
+            { 
+                MessageBox.Show($"Error al obtener los datos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); 
+            } 
         }
 
 
@@ -82,7 +64,7 @@ namespace Desktop.Views
         {
             _generos= await _generoService.GetAllAsync();
             ComboBoxGenero.DataSource = _generos;
-            ComboBoxGenero.DisplayMember = "Titulo";
+            ComboBoxGenero.DisplayMember = "Nombre";
             ComboBoxGenero.ValueMember = "Id";
             ComboBoxGenero.SelectedIndex = -1;
         }
@@ -91,7 +73,7 @@ namespace Desktop.Views
         {
             _artistas = await _artistaService.GetAllAsync();
             ComboBoxArtista.DataSource = _artistas;
-            ComboBoxArtista.DisplayMember = "Titulo";
+            ComboBoxArtista.DisplayMember = "Nombre";
             ComboBoxArtista.ValueMember = "Id";
             ComboBoxArtista.SelectedIndex = -1;
         }
