@@ -43,7 +43,7 @@ namespace Backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Usuario>> GetUsuario(int id)
         {
-            var usuario = await _context.Usuario.FindAsync(id);
+            var usuario = await _context.Usuarios.FindAsync(id);
 
             if (usuario == null)
             {
@@ -90,11 +90,11 @@ namespace Backend.Controllers
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
             //controlamos que el email no exista ya en la base de datos 
-            if (_context.Usuario.IgnoreQueryFilters().Any(u => u.Email == usuario.Email))
+            if (_context.Usuarios.IgnoreQueryFilters().Any(u => u.Email == usuario.Email))
             {
                 return Conflict("Error, existe un usuario ya registrado con el email ingresado");
             }
-            _context.Usuario.Add(usuario);
+            _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetUsuario", new { id = usuario.Id }, usuario);
@@ -105,14 +105,14 @@ namespace Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUsuario(int id)
         {
-            var usuario = await _context.Usuario.FindAsync(id);
+            var usuario = await _context.Usuarios.FindAsync(id);
             if (usuario == null)
             {
                 return NotFound();
             }
 
             usuario.IsDeleted = true; //soft delete
-            _context.Usuario.Update(usuario);
+            _context.Usuarios.Update(usuario);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -137,7 +137,7 @@ namespace Backend.Controllers
 
         private bool UsuarioExists(int id)
         {
-            return _context.Usuario.Any(e => e.Id == id);
+            return _context.Usuarios.Any(e => e.Id == id);
         }
     }
 }
