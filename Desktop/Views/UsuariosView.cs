@@ -64,11 +64,13 @@ namespace Desktop.Views
                 else
                 {
                     _usuarios = await _usuarioService.GetAllAsync();
+
+                    GridUsuarios.DataSource = _usuarios;
+                    GridUsuarios.Columns["Id"].Visible = false;
+                    GridUsuarios.Columns["IsDeleted"].Visible = false;
+                    GetComboTiposDeUsuarios();
                 }
-                GridUsuarios.DataSource = _usuarios;
-                GridUsuarios.Columns["Id"].Visible = false;
-                GridUsuarios.Columns["IsDeleted"].Visible = false;
-                GetComboTiposDeUsuarios();
+                
             }
             catch
             {
