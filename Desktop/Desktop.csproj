@@ -37,7 +37,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="Views\UsuariosView.cs" />
   </ItemGroup>
 
   <ItemGroup>

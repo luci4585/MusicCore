@@ -58,7 +58,7 @@ namespace Desktop.Views
             }
             GridVentas.DataSource = _ventas;
 
-            GridVentas.HideColumns("Id", "ClienteId", "UsuarioId", "DiscoId", "IsDeleted");
+            GridVentas.HideColumns("Id", "ClienteId", "UsuarioId", "DiscoId", "IsDeleted", "Precio");
             GridVentas.Columns["Precio"].DefaultCellStyle.Format = "C2";
 
             if (GridVentas.Columns.Contains("Fecha"))

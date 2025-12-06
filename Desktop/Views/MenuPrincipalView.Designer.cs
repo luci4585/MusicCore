@@ -30,12 +30,11 @@
         {
             menuStrip1 = new MenuStrip();
             MenuPrincipal = new FontAwesome.Sharp.IconMenuItem();
-            SubMenuUsuarios = new FontAwesome.Sharp.IconMenuItem();
             SubMenuDisco = new FontAwesome.Sharp.IconMenuItem();
+            SubMenuVenta = new FontAwesome.Sharp.IconMenuItem();
             MenuSalir = new FontAwesome.Sharp.IconMenuItem();
             SubMenuSalir = new FontAwesome.Sharp.IconMenuItem();
             toolStrip1 = new ToolStrip();
-            SubMenuVenta = new FontAwesome.Sharp.IconMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -45,29 +44,20 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { MenuPrincipal, MenuSalir });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(800, 28);
+            menuStrip1.Padding = new Padding(9, 3, 0, 3);
+            menuStrip1.Size = new Size(1143, 35);
             menuStrip1.TabIndex = 1;
             menuStrip1.Text = "menuStrip1";
             // 
             // MenuPrincipal
             // 
-            MenuPrincipal.DropDownItems.AddRange(new ToolStripItem[] { SubMenuUsuarios, SubMenuDisco, SubMenuVenta });
+            MenuPrincipal.DropDownItems.AddRange(new ToolStripItem[] { SubMenuDisco, SubMenuVenta });
             MenuPrincipal.IconChar = FontAwesome.Sharp.IconChar.HomeLg;
             MenuPrincipal.IconColor = Color.Black;
             MenuPrincipal.IconFont = FontAwesome.Sharp.IconFont.Auto;
             MenuPrincipal.Name = "MenuPrincipal";
-            MenuPrincipal.Size = new Size(85, 24);
+            MenuPrincipal.Size = new Size(114, 29);
             MenuPrincipal.Text = "Principal";
-            // 
-            // SubMenuUsuarios
-            // 
-            SubMenuUsuarios.IconChar = FontAwesome.Sharp.IconChar.UserFriends;
-            SubMenuUsuarios.IconColor = Color.Black;
-            SubMenuUsuarios.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            SubMenuUsuarios.Name = "SubMenuUsuarios";
-            SubMenuUsuarios.Size = new Size(184, 26);
-            SubMenuUsuarios.Text = "Usuarios";
-            SubMenuUsuarios.Click += SubMenuUsuarios_Click;
             // 
             // SubMenuDisco
             // 
@@ -75,9 +65,19 @@
             SubMenuDisco.IconColor = Color.Black;
             SubMenuDisco.IconFont = FontAwesome.Sharp.IconFont.Auto;
             SubMenuDisco.Name = "SubMenuDisco";
-            SubMenuDisco.Size = new Size(184, 26);
+            SubMenuDisco.Size = new Size(270, 34);
             SubMenuDisco.Text = "Disco";
             SubMenuDisco.Click += SubMenuDisco_Click;
+            // 
+            // SubMenuVenta
+            // 
+            SubMenuVenta.IconChar = FontAwesome.Sharp.IconChar.MoneyBill;
+            SubMenuVenta.IconColor = Color.Black;
+            SubMenuVenta.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            SubMenuVenta.Name = "SubMenuVenta";
+            SubMenuVenta.Size = new Size(270, 34);
+            SubMenuVenta.Text = "Venta";
+            SubMenuVenta.Click += SubMenuVenta_Click;
             // 
             // MenuSalir
             // 
@@ -86,7 +86,7 @@
             MenuSalir.IconColor = Color.Black;
             MenuSalir.IconFont = FontAwesome.Sharp.IconFont.Auto;
             MenuSalir.Name = "MenuSalir";
-            MenuSalir.Size = new Size(61, 24);
+            MenuSalir.Size = new Size(81, 29);
             MenuSalir.Text = "Salir";
             // 
             // SubMenuSalir
@@ -95,38 +95,30 @@
             SubMenuSalir.IconColor = Color.Black;
             SubMenuSalir.IconFont = FontAwesome.Sharp.IconFont.Auto;
             SubMenuSalir.Name = "SubMenuSalir";
-            SubMenuSalir.Size = new Size(158, 22);
+            SubMenuSalir.Size = new Size(241, 34);
             SubMenuSalir.Text = "Salir del sistema";
             SubMenuSalir.Click += SubMenuSalir_Click;
             // 
             // toolStrip1
             // 
             toolStrip1.ImageScalingSize = new Size(20, 20);
-            toolStrip1.Location = new Point(0, 28);
+            toolStrip1.Location = new Point(0, 35);
             toolStrip1.Name = "toolStrip1";
-            toolStrip1.Size = new Size(800, 25);
+            toolStrip1.Padding = new Padding(0, 0, 3, 0);
+            toolStrip1.Size = new Size(1143, 25);
             toolStrip1.TabIndex = 2;
             toolStrip1.Text = "toolStrip1";
             // 
-            // SubMenuVenta
-            // 
-            SubMenuVenta.IconChar = FontAwesome.Sharp.IconChar.MoneyBill;
-            SubMenuVenta.IconColor = Color.Black;
-            SubMenuVenta.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            SubMenuVenta.Name = "SubMenuVenta";
-            SubMenuVenta.Size = new Size(184, 26);
-            SubMenuVenta.Text = "Venta";
-            SubMenuVenta.Click += SubMenuVenta_Click;
-            // 
             // MenuPrincipalView
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1143, 750);
             Controls.Add(toolStrip1);
             Controls.Add(menuStrip1);
             IsMdiContainer = true;
             MainMenuStrip = menuStrip1;
+            Margin = new Padding(4, 5, 4, 5);
             Name = "MenuPrincipalView";
             Text = "Music Core : Tienda de discos musicales";
             WindowState = FormWindowState.Maximized;
@@ -143,7 +135,6 @@
         private ToolStrip toolStrip1;
         private FontAwesome.Sharp.IconMenuItem MenuSalir;
         private FontAwesome.Sharp.IconMenuItem SubMenuSalir;
-        private FontAwesome.Sharp.IconMenuItem SubMenuUsuarios;
         private FontAwesome.Sharp.IconMenuItem SubMenuDisco;
         private FontAwesome.Sharp.IconMenuItem SubMenuVenta;
     }

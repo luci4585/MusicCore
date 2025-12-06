@@ -14,13 +14,6 @@ namespace Desktop
             this.Close();
         }
 
-        private void SubMenuUsuarios_Click(object sender, EventArgs e)
-        {
-            var usuariosView = new UsuariosView();
-            usuariosView.MdiParent = this;
-            usuariosView.Show();
-        }
-
         private void SubMenuDisco_Click(object sender, EventArgs e)
         {
             var discosView = new DiscosView();

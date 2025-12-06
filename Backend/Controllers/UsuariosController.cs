@@ -28,6 +28,7 @@ namespace Backend.Controllers
             filter = filter?.ToLower() ?? "";
 
             return await _context.Usuarios
+                .Where(u => !u.IsDeleted) 
                 .Where(u =>
                     u.NombreUsuario.ToLower().Contains(filter) ||
                     u.Email.ToLower().Contains(filter) ||
@@ -35,6 +36,7 @@ namespace Backend.Controllers
                 )
                 .ToListAsync();
         }
+
 
 
         // GET: api/CUsuarios/deleteds
