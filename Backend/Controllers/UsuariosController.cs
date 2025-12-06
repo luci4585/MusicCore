@@ -25,12 +25,17 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios([FromQuery] string? filter = "")
         {
+            filter = filter?.ToLower() ?? "";
+
             return await _context.Usuarios
-                .Where(u => u.NombreUsuario.Contains(filter, StringComparison.OrdinalIgnoreCase)
-                        || u.Email.Contains(filter, StringComparison.OrdinalIgnoreCase)
-                        || u.Password.Contains(filter, StringComparison.OrdinalIgnoreCase))
+                .Where(u =>
+                    u.NombreUsuario.ToLower().Contains(filter) ||
+                    u.Email.ToLower().Contains(filter) ||
+                    u.Password.ToLower().Contains(filter)
+                )
                 .ToListAsync();
         }
+
 
         // GET: api/CUsuarios/deleteds
         [HttpGet("deleteds/")]
