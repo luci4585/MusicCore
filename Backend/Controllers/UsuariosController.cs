@@ -23,9 +23,13 @@ namespace Backend.Controllers
 
         // GET: api/Usuarios
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuario()
+        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios([FromQuery] string? filter = "")
         {
-            return await _context.Usuario.ToListAsync();
+            return await _context.Usuarios
+                .Where(u => u.NombreUsuario.Contains(filter, StringComparison.OrdinalIgnoreCase)
+                        || u.Email.Contains(filter, StringComparison.OrdinalIgnoreCase)
+                        || u.Password.Contains(filter, StringComparison.OrdinalIgnoreCase))
+                .ToListAsync();
         }
 
         // GET: api/CUsuarios/deleteds
@@ -85,11 +89,17 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
-            _context.Usuario.Add(usuario);
+            //controlamos que el email no exista ya en la base de datos 
+            if (_context.Usuarios.IgnoreQueryFilters().Any(u => u.Email == usuario.Email))
+            {
+                return Conflict("Error, existe un usuario ya registrado con el email ingresado");
+            }
+            _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetUsuario", new { id = usuario.Id }, usuario);
         }
+
 
         // DELETE: api/Usuarios/5
         [HttpDelete("{id}")]
