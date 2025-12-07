@@ -36,7 +36,13 @@ namespace Backend.Controllers
         [HttpGet("deleteds/")]
         public async Task<ActionResult<IEnumerable<Venta>>> GetVentasDeleteds()
         {
-            return await _context.Ventas.IgnoreQueryFilters().Where(c => c.IsDeleted.Equals(true)).ToListAsync();
+            return await _context.Ventas
+                .IgnoreQueryFilters()
+                .Where(v => v.IsDeleted == true)
+                .Include(v => v.Cliente)
+                .Include(v => v.Usuario)
+                .Include(v => v.Disco)
+                .ToListAsync();
         }
 
         // GET: api/Ventas/5

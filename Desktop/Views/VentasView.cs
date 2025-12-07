@@ -58,6 +58,32 @@ namespace Desktop.Views
             }
             GridVentas.DataSource = _ventas;
 
+            if (GridVentas.Columns.Contains("Disco"))
+                GridVentas.Columns["Disco"].Visible = false;
+
+            if (!GridVentas.Columns.Contains("DiscoTitulo"))
+                GridVentas.Columns.Add("DiscoTitulo", "Disco");
+
+            foreach (DataGridViewRow row in GridVentas.Rows)
+            {
+                var venta = row.DataBoundItem as Venta;
+                if (venta != null)
+                    row.Cells["DiscoTitulo"].Value = venta.Disco?.Titulo;
+            }
+
+            if (GridVentas.Columns.Contains("Disco"))
+                GridVentas.Columns["Disco"].Visible = false;
+
+            if (!GridVentas.Columns.Contains("DiscoTitulo"))
+                GridVentas.Columns.Add("DiscoTitulo", "Disco");
+
+            foreach (DataGridViewRow row in GridVentas.Rows)
+            {
+                var venta = row.DataBoundItem as Venta;
+                if (venta != null)
+                    row.Cells["DiscoTitulo"].Value = venta.Disco?.Titulo;
+            }
+
             GridVentas.HideColumns("Id", "ClienteId", "UsuarioId", "DiscoId", "IsDeleted", "Precio");
             GridVentas.Columns["Precio"].DefaultCellStyle.Format = "C2";
 
@@ -143,34 +169,37 @@ namespace Desktop.Views
         {
             Venta ventaAGuardar = new Venta
             {
-                Id = _currentVenta.Id,
-                //Id = _currentVenta?.Id ?? 0,
+                Id = _currentVenta?.Id ?? 0,
                 Cantidad = (int)NumericCantidad.Value,
-                ClienteId= (int)(ComboCliente.SelectedValue ?? 0),
-                DiscoId= (int)(ComboDisco.SelectedValue ?? 0),
-                UsuarioId= _currentVenta.UsuarioId
+                ClienteId = (int)(ComboCliente.SelectedValue ?? 0),
+                DiscoId = (int)(ComboDisco.SelectedValue ?? 0),
+                UsuarioId = _currentVenta?.UsuarioId > 0
+                ? _currentVenta.UsuarioId 
+                : 1
             };
 
-            ventaAGuardar.Cliente = _currentVenta.Cliente;
-            ventaAGuardar.Usuario = _currentVenta.Usuario;
-            ventaAGuardar.Disco = _currentVenta.Disco;
+            ventaAGuardar.Cliente = _currentVenta?.Cliente;
+            ventaAGuardar.Usuario = _currentVenta?.Usuario;
+            ventaAGuardar.Disco = _currentVenta?.Disco;
 
             bool response = false;
-            if (_currentVenta != null)
+
+            // si Id > 0 → es modificación
+            if (_currentVenta != null && _currentVenta.Id > 0)
             {
-                ventaAGuardar.Id = _currentVenta.Id; // asegurar id válido
                 response = await _ventaService.UpdateAsync(ventaAGuardar);
             }
             else
             {
-                var nuevaventa = await _ventaService.AddAsync(ventaAGuardar);
-                response = nuevaventa != null;
+                var nuevaVenta = await _ventaService.AddAsync(ventaAGuardar);
+                response = nuevaVenta != null;
             }
+
             if (response)
             {
-                _currentVenta = null; // Reset the modified movie after saving
-                LabelStatusMessage.Text = $"Venta {ventaAGuardar} guardada correctamente";
-                TimerStatusBar.Start(); // Iniciar el temporizador para mostrar el mensaje en la barra de estado
+                _currentVenta = null;
+                LabelStatusMessage.Text = $"Venta guardada correctamente";
+                TimerStatusBar.Start();
                 await GetAllData();
                 LimpiarControlesAgregarEditar();
                 TabControl.SelectedTab = TabPageLista;
@@ -180,6 +209,7 @@ namespace Desktop.Views
                 MessageBox.Show("Error al agregar la venta", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void BtnModificar_Click(object sender, EventArgs e)
         {
@@ -229,7 +259,7 @@ namespace Desktop.Views
             if (GridVentas.Rows.Count > 0 && GridVentas.SelectedRows.Count > 0)
             {
                 Venta entitySelected = (Venta)GridVentas.SelectedRows[0].DataBoundItem;
-                var respuesta = MessageBox.Show($"¿Está seguro de recuperar la venta {entitySelected} seleccionado?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                var respuesta = MessageBox.Show($"¿Está seguro de recuperar la venta seleccionada?", "Confirmación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (respuesta == DialogResult.Yes)
                 {
                     if (await _ventaService.RestoreAsync(entitySelected.Id))
