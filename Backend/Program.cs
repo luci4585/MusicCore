@@ -4,48 +4,59 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ✅ ESTA es la forma correcta
-var cadenaConexion = builder.Configuration.GetConnectionString("mysqlRemote");
+// 🔹 Connection string
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .AddEnvironmentVariables()
+    .Build();
 
+string? cadenaConexion = configuration.GetConnectionString("mysqlRemote");
+
+// 🔹 DbContext
 builder.Services.AddDbContext<MusicCoreContext>(options =>
     options.UseMySql(
         cadenaConexion,
-        ServerVersion.AutoDetect(cadenaConexion),
-        mysqlOptions => mysqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 5,
-            maxRetryDelay: TimeSpan.FromSeconds(30),
-            errorNumbersToAdd: null
-        )
+        ServerVersion.AutoDetect(cadenaConexion)
     )
 );
 
+// 🔹 Controllers + JSON
 builder.Services.AddControllers()
     .AddJsonOptions(x =>
         x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+// 🔹 Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// 🔹 CORS (lo dejamos abierto a propósito)
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowBlazor",
+    options.AddPolicy("OpenCors",
         policy => policy
-            .WithOrigins("https://webmusicore.azurewebsites.net")
+            .AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
 
 var app = builder.Build();
 
-app.UseCors("AllowBlazor");
+// 🔥 ESTO ES CLAVE
+app.UseDeveloperExceptionPage(); // ⬅️ fuerza mostrar el error real
+
+app.UseCors("OpenCors");
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
 app.UseAuthorization();
+
 app.MapControllers();
+
 app.Run();
+
 
 
 //using Backend.DataContext;
