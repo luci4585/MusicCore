@@ -113,6 +113,8 @@ else
         if (idVenta != null)
         {
             venta = await _ventaService.GetByIdAsync((int)idVenta);
+
+            venta.Precio = decimal.Round(venta.Precio, 2);
         }
         else
         {
@@ -129,6 +131,8 @@ else
 
     private async Task Guardar()
     {
+        venta.Precio = decimal.Round(venta.Precio, 2);
+
         if (isEditing)
             await _ventaService.UpdateAsync(venta);
         else
