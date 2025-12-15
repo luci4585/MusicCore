@@ -39,7 +39,7 @@ else
             @foreach (var venta in ventas)
             {
                 <tr>
-                    <td>@venta.Fecha</td>
+                    <td>@venta.Fecha.ToString("dd/MM/yyyy")</td>
                     <td>@venta.Cliente.Nombre</td>
                     <td>@($"$ {venta.Precio:N2}")</td>
                     <td>@venta.Cantidad</td>
