@@ -54,7 +54,10 @@ else
                     <!-- Precio -->
                     <div class="form-group">
                         <label class="form-label">Precio unitario:</label>
-                        <InputNumber class="form-control mb-2" @bind-Value="venta.Precio" />
+                        <InputNumber class="form-control mb-2"
+                                         @bind-Value="venta.Precio"
+                                         @bind-Value:format="F2" />
+
                     </div>
 
                     <!-- Cantidad -->
