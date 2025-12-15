@@ -115,11 +115,11 @@ else
         if (user != null)
         {
             isAuthenticated = true;
-            StateHasChanged();
+            NavigationManager.NavigateTo("/perfilusuario");
         }
         else
         {
-            await sweetAlert.FireAsync("ERROR", "No se pudo iniciar sesión con Google.", SweetAlertIcon.Error);
+            await sweetAlert.FireAsync("Error de autenticación", "No se pudo iniciar sesión con Google.", SweetAlertIcon.Error);
         }
     }
 }

@@ -1,4 +1,4 @@
-using Backend.DataContext;
+ï»¿using Backend.DataContext;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -10,7 +10,7 @@ var configuration = new ConfigurationBuilder()
 .Build();
 string? cadenaConexion = configuration.GetConnectionString("mysqlRemote");
 
-//configuración de inyección de dependencias del DBContextdotnet dev-certs https --trust
+//configuraciÃ³n de inyecciÃ³n de dependencias del DBContextdotnet dev-certs https --trust
 
 builder.Services.AddDbContext<MusicCoreContext>(
     options => options.UseMySql(cadenaConexion,
@@ -30,7 +30,7 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Configurar una política de CORS
+// Configurar una polÃ­tica de CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins",
@@ -56,7 +56,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.UseCors("AllowSpecificOrigins");
 
 app.Run();
